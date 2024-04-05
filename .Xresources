@@ -1,0 +1,6 @@
+XTerm.*.foreground: white
+XTerm.*.background: black
+
+XTerm.*.faceName: FiraCode:style=SemiBold:size=12
+XTerm.*.renderFont: true
+XTerm.*.selectToClipboard: true

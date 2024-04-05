@@ -1,0 +1,12 @@
+Config { overrideRedirect = False
+       , font     = "Fira Code Bold"
+       , bgColor  = "#000000"
+       , fgColor  = "#ffffff"
+       , position = BottomSize L 100 30
+       , commands = [ Run PipeReader "</tmp/status_bar>:/tmp/status_bar" "status" 
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = " %status% "
+       }
+
