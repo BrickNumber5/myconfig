@@ -59,6 +59,8 @@ customConfig = def
     , ("M-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot")
     , ("M-S-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot -s")
     
+    , ("M-S-s", spawn "slock")
+    
     , ("<XF86MonBrightnessUp>",   spawn "lux -a 5%")
     , ("<XF86MonBrightnessDown>", spawn "lux -s 5%")
     ]
