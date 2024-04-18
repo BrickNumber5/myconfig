@@ -23,14 +23,16 @@ The following software is expected by some configuration file. This is not an ex
  - `xterm`   - Current terminal emulator, planning to replace. Used in `~/.config/xmonad/xmonad.hs` at least.
  - `firefox` - Used for `M-f` (`~/.config/xmonad/xmonad.hs`)
  - `python3` - Used for the calculator button (`~/.config/xmonad/xmonad.hs`)
- - `lux`     - Used for brightness management in (`~/.config/xmonad/xmonad.hs`) (could be quite easily replaced with an alternative background manager.
+ - `lux`     - Used for brightness management in (`~/.config/xmonad/xmonad.hs`) (could be quite easily replaced with an alternative backlight manager.
  - `feh`     - For wallpaper (`~/.config/xmonad/xmonad.hs`)
  - `slock`   - Lock the screen with `M-S-s` (`~/.config/xmonad/xmonad.hs`)
-
+ - `scrot`   - Take screenshots with `M-<Print>` or `M-S-<Print>` (`~/.config/xmonad/xmonad.hs`)
+ - `dmenu`   - For menus (`~/.config/xmonad/xmonad.hs`)
 
 ## Required Other
 
 In addition to the required software, some configuration files expect something to be located in a particular place.
 
  - `~/.wallpaper/current` - This should be an image to load as the current wallpaper (using feh). In practice, I store all my wallpapers in `~/.wallpaper` and symlink this to whichever I want to use.
+ - `~/Screenshots` - The screenshot shortcuts in `~/.config/xmonoad/xmonad.hs`) put screenshots here
  - Fira Code - Font. Used by xterm (`~/.Xresources`) and xmobar (`~/.config/xmobar/`) at least. Installed anywhere such that X can access it.
