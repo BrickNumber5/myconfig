@@ -13,14 +13,16 @@ import XMonad.Layout.Spacing
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 
 main :: IO ()
 main = xmonad
      . ewmh
-     . withEasySB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
-                 <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP)) defToggleStrutsKey
+     . docks
+     . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
+             <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP))
      $ customConfig
 
 customXmobarPP :: PP
@@ -47,17 +49,21 @@ customXmobarPP = def
 
 customConfig = def
     { modMask     = mod4Mask   -- Rebind Mod to the Super Key (So I can actually use [Alt] for normal things)
-    , layoutHook  = spacingWithEdge 3 $ customLayoutHook
+    , layoutHook  = avoidStruts $ spacingWithEdge 3 $ customLayoutHook
     , manageHook  = customManageHook
     , startupHook = customStartupHook
     , borderWidth = 2
     , focusedBorderColor = tmmagenta
     }
+  `removeKeysP`
+    [ "M-p"
+    , "M-S-p" 
+    ]
   `additionalKeysP`
     [ ("M-/", runProcessWithInput "dmenu_path" [] "" >>= menu "Launch" . split (== '\n') >>= smartSpawn)
       
     , ("M-f", spawn "firefox")
-    , ("<XF86Calculator>", smartSpawn "python3")
+    , ("<XF86Calculator>", runInTerm "" "python3")
     
     , ("M-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot")
     , ("M-S-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot -s")
@@ -89,7 +95,7 @@ customStartupHook = do
  -- Utility to spawn programs
  -- Unlike spawn, this creates a terminal if needed
 smartSpawn      :: String -> X ()
-smartSpawn prog = spawn $ "xterm -e 'exec " ++ prog ++ "'"
+smartSpawn prog = spawn $ "xterm -e 'exec " ++ asString prog ++ "'"
 
  -- Utility to split strings
 split     :: (t -> Bool) -> [t] -> [[t]]
