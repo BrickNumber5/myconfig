@@ -60,7 +60,8 @@ customConfig = def
     , "M-S-p" 
     ]
   `additionalKeysP`
-    [ ("M-/", runProcessWithInput "dmenu_path" [] "" >>= menu "Launch" . split (== '\n') >>= smartSpawn)
+    [ ("M-/",   runProcessWithInput "dmenu_path" [] "" >>= menu "Launch" . split (== '\n') >>= spawn)
+    , ("M-C-/", runProcessWithInput "dmenu_path" [] "" >>= menu "Launch (In Terminal)" . split (== '\n') >>= runInTerm "")
       
     , ("M-f", spawn "firefox")
     , ("<XF86Calculator>", runInTerm "" "python3")
@@ -91,11 +92,6 @@ customManageHook = composeAll
 customStartupHook :: X ()
 customStartupHook = do
   spawnOnce "feh --bg-fill --nofehbg ~/.wallpaper/current"
-
- -- Utility to spawn programs
- -- Unlike spawn, this creates a terminal if needed
-smartSpawn      :: String -> X ()
-smartSpawn prog = spawn $ "xterm -e 'exec " ++ asString prog ++ "'"
 
  -- Utility to split strings
 split     :: (t -> Bool) -> [t] -> [[t]]
