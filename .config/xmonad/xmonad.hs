@@ -73,6 +73,11 @@ customConfig = def
     
     , ("<XF86MonBrightnessUp>",   spawn "lux -a 5%")
     , ("<XF86MonBrightnessDown>", spawn "lux -s 5%")
+    
+    , ("<XF86AudioMute>",          spawn "pamixer -t")
+    , ("<XF86AudioLowerVolume>",   spawn "pamixer -d 1")
+    , ("<XF86AudioRaiseVolume>",   spawn "pamixer -i 1")
+    , ("S-<XF86AudioRaiseVolume>", spawn "pamixer -i 1 --allow-boost")
     ]
 
 customLayoutHook = threeColLayout ||| tiledLayout ||| Mirror tiledLayout ||| Full

@@ -13,12 +13,7 @@ Config { overrideRedirect = False
                         [ "--template", "<leftvbar> <left>%<acstatus>"
                         , "--", "-O", " (Plugged In)", "-i", " (Fully Charged)", "-o", ""
                         ] 10
-                    , Run Alsa "default" "Master"
-                        [ "--template", "<volumestatus>"
-                        , "--suffix"  , "True"
-                        , "--"
-                        , "--on", ""
-                        ]
+                    , Run Com "pamixer" ["--get-volume-human"] "pulseaudio" 1
                     , Run Memory ["--template", "Mem: <usedratio>%"] 10
                     , Run Swap [] 10
                     , Run Wireless ""
@@ -28,6 +23,6 @@ Config { overrideRedirect = False
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = " %XMonadLog% }{ %alsa:default:Master%   %battery%   %cpu%   %memory% * %swap%   %wi%   %date% "
+       , template = " %XMonadLog% }{ %pulseaudio%   %battery%   %cpu%   %memory% * %swap%   %wi%   %date% "
        }
 

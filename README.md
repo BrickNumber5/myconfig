@@ -28,6 +28,7 @@ The following software is expected by some configuration file. This is not an ex
  - `slock`   - Lock the screen with `M-S-s` (`~/.config/xmonad/xmonad.hs`)
  - `scrot`   - Take screenshots with `M-<Print>` or `M-S-<Print>` (`~/.config/xmonad/xmonad.hs`)
  - `dmenu`   - For menus (`~/.config/xmonad/xmonad.hs`)
+ - `pulseaudio`, `pamixer` - For Audio Controls and Display (`~/.config/xmonad/xmonad.hs`, `~/.config/xmobar/xmobartoprc`)
 
 ## Required Other
 
