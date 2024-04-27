@@ -60,24 +60,40 @@ customConfig = def
     , "M-S-p" 
     ]
   `additionalKeysP`
-    [ ("M-/",   runProcessWithInput "dmenu_path" [] "" >>= menu "Launch" . split (== '\n') >>= spawn)
-    , ("M-C-/", runProcessWithInput "dmenu_path" [] "" >>= menu "Launch (In Terminal)" . split (== '\n') >>= runInTerm "")
+    [ ("M-/",   runProcessWithInput "dmenu_path" [] ""
+            >>= menu "Launch" . split (== '\n')
+            >>= safeSpawnProg
+      )
+    , ("M-C-/", runProcessWithInput "dmenu_path" [] ""
+            >>= menu "Launch (In Terminal)" . split (== '\n')
+            >>= runInTerm ""
+      )
       
-    , ("M-f", spawn "firefox")
+    , ("M-f",   safeSpawnProg "firefox")
+      -- This relies, perhaps dangerously, on a) the current working directory always being home
+      -- (since runProcessWithInput doesn't do shell expansion) and b) that the profiles will always
+      -- be in approximately the same format in ~/.mozilla/firefox/profiles.ini.
+      -- Likely, the worst possible actual breakage will be that this shortcut simply stops working at
+      -- some point.
+    , ("M-S-f", runProcessWithInput "sed" ["/Name=/!d;s/Name=//", ".mozilla/firefox/profiles.ini"] ""
+            >>= menu "Firefox Profile" . split (== '\n')
+            >>= safeSpawn "firefox" . ("-P" :) . (: [])
+      )
+    
     , ("<XF86Calculator>", runInTerm "" "python3")
     
-    , ("M-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot")
+    , ("M-<Print>",   unGrab *> spawn "cd ~/Screenshots ; scrot")
     , ("M-S-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot -s")
     
-    , ("M-S-s", spawn "slock")
+    , ("M-S-s", safeSpawnProg "slock")
     
-    , ("<XF86MonBrightnessUp>",   spawn "lux -a 5%")
-    , ("<XF86MonBrightnessDown>", spawn "lux -s 5%")
+    , ("<XF86MonBrightnessUp>",   safeSpawn "lux" ["-a", "5%"])
+    , ("<XF86MonBrightnessDown>", safeSpawn "lux" ["-s", "5%"])
     
-    , ("<XF86AudioMute>",          spawn "pamixer -t")
-    , ("<XF86AudioLowerVolume>",   spawn "pamixer -d 1")
-    , ("<XF86AudioRaiseVolume>",   spawn "pamixer -i 1")
-    , ("S-<XF86AudioRaiseVolume>", spawn "pamixer -i 1 --allow-boost")
+    , ("<XF86AudioMute>",          safeSpawn "pamixer" ["-t"])
+    , ("<XF86AudioLowerVolume>",   safeSpawn "pamixer" ["-d", "1"])
+    , ("<XF86AudioRaiseVolume>",   safeSpawn "pamixer" ["-i", "1"])
+    , ("S-<XF86AudioRaiseVolume>", safeSpawn "pamixer" ["-i", "1", "--allow-boost"])
     ]
 
 customLayoutHook = threeColLayout ||| tiledLayout ||| Mirror tiledLayout ||| Full
@@ -116,7 +132,7 @@ menu prompt options = Dmenu.menuArgs "dmenu"
     , "-nf", tmwhite
     , "-sb", tmblack
     , "-sf", tmmagenta
-    ] options
+    ] $ map (filter (/= '\n')) options
 
  -- Theme Colors
 tmblack, tmgray, tmwhite, tmmagenta :: String
