@@ -112,7 +112,7 @@ customManageHook = composeAll
 
 customStartupHook :: X ()
 customStartupHook = do
-  spawnOnce "feh --bg-fill --nofehbg ~/.wallpaper/current"
+  spawn "feh --bg-fill --no-fehbg ~/.wallpaper/current"
 
  -- Utility to split strings
 split     :: (t -> Bool) -> [t] -> [[t]]
