@@ -22,7 +22,10 @@ Config { overrideRedirect = False
                     , Run Memory ["--template", "Mem: <usedratio>%"] 10
                     , Run Swap [] 10
                     , Run Wireless ""
-                        [ "--template", "<ssid> <qualityvbar>" ] 10
+                        [ "--template", "<qualityipat><ssid>"
+                        , "--"
+                        , "--quality-icon-pattern", "<icon=wifi_%%.xpm/>"
+                        ] 10
                     , Run Date "%a %Y-%m-%d <fc=#FF44AA>%H:%M</fc>" "date" 10
                     , Run XMonadLog
                     ]
