@@ -4,6 +4,7 @@ Config { overrideRedirect = False
        , fgColor  = "#ffffff"
        , alpha    = 128
        , position = TopSize L 100 30
+       , iconRoot = ".config/xmobar/icons/"
        , commands = [  Run Cpu
                         [ "-L", "3"
                         , "-H", "50"
@@ -11,8 +12,11 @@ Config { overrideRedirect = False
                         , "--normal", "green"
                         ] 10
                     , Run Battery
-                        [ "--template", "<leftvbar> <left>%<acstatus>"
-                        , "--", "-O", " (Plugged In)", "-i", " (Fully Charged)", "-o", ""
+                        [ "--template", "<leftipat><left>%"
+                        , "--"
+                        , "--idle-icon-pattern", "<icon=batt_plug_%%.xpm/>"
+                        , "--on-icon-pattern",   "<icon=batt_plug_%%.xpm/>"
+                        , "--off-icon-pattern",  "<icon=batt_%%.xpm/>"
                         ] 10
                     , Run Com "pamixer" ["--get-volume-human"] "pulseaudio" 1
                     , Run Memory ["--template", "Mem: <usedratio>%"] 10
