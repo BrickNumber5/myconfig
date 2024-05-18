@@ -8,26 +8,28 @@ My (Arch\*) Linux configuration files. These are arranged in the relative positi
 
 This repo contains configuration files for:
 
- - Bash   (Mostly to launch X on login, `~/.bashrc`, `~/.bash_profile`)
- - XMonad (Used directly without a WM, launched automatically by `~/.xinitrc`)
- - XMobar (`~/.config/xmobar/`)
- - XTerm  (`~/.Xresources`)
- - Vim    (`~/.vimrc`) 
+ - Bash      (Mostly to launch X on login, `~/.bashrc`, `~/.bash_profile`)
+ - XMonad    (Used directly without a WM, launched automatically by `~/.xinitrc`)
+ - XMobar    (`~/.config/xmobar/`)
+ - XTerm     (`~/.Xresources`)
+ - Vim       (`~/.vimrc`)
+ - Alacritty (`~/.config/alacritty/alacritty.toml`)
 
 ## Required Software
 
 The following software is expected by some configuration file. This is not an exclusive list, although most things not here are either requirements of things which are or near-universal (e.g. part of arch `base` or `base-devel`)
 
- - `xmonad`  - For xmonad
- - `xmobar`  - For status bars
- - `xterm`   - Current terminal emulator, planning to replace. Used in `~/.config/xmonad/xmonad.hs` at least.
- - `firefox` - Used for `M-f` (`~/.config/xmonad/xmonad.hs`)
- - `python3` - Used for the calculator button (`~/.config/xmonad/xmonad.hs`)
- - `lux`     - Used for brightness management in (`~/.config/xmonad/xmonad.hs`) (could be quite easily replaced with an alternative backlight manager.
- - `feh`     - For wallpaper (`~/.config/xmonad/xmonad.hs`)
- - `slock`   - Lock the screen with `M-S-s` (`~/.config/xmonad/xmonad.hs`)
- - `scrot`   - Take screenshots with `M-<Print>` or `M-S-<Print>` (`~/.config/xmonad/xmonad.hs`)
- - `dmenu`   - For menus (`~/.config/xmonad/xmonad.hs`)
+ - `xmonad`    - For xmonad
+ - `xmobar`    - For status bars
+ - `xterm`     - Maybe? I was using this as my terminal, but I've switched to alacritty, there might still be dependencies, though.
+ - `alacritty` - For Terminal Emulation (`~/.config/xmonad/xmonad.hs`)
+ - `firefox`   - Used for `M-f` (`~/.config/xmonad/xmonad.hs`)
+ - `python3`   - Used for the calculator button (`~/.config/xmonad/xmonad.hs`)
+ - `lux`       - Used for brightness management in (`~/.config/xmonad/xmonad.hs`) (could be quite easily replaced with an alternative backlight manager.
+ - `feh`       - For wallpaper (`~/.config/xmonad/xmonad.hs`)
+ - `slock`     - Lock the screen with `M-S-s` (`~/.config/xmonad/xmonad.hs`)
+ - `scrot`     - Take screenshots with `M-<Print>` or `M-S-<Print>` (`~/.config/xmonad/xmonad.hs`)
+ - `dmenu`     - For menus (`~/.config/xmonad/xmonad.hs`)
  - `pulseaudio`, `pamixer` - For Audio Controls and Display (`~/.config/xmonad/xmonad.hs`, `~/.config/xmobar/xmobartoprc`)
 
 ## Required Other

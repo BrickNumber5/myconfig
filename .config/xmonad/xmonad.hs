@@ -54,6 +54,7 @@ customConfig = def
     , startupHook = customStartupHook
     , borderWidth = 2
     , focusedBorderColor = tmmagenta
+    , terminal = "alacritty"
     }
   `removeKeysP`
     [ "M-p"
