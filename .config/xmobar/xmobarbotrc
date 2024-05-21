@@ -1,5 +1,7 @@
 Config { overrideRedirect = False
-       , font     = "Fira Code Bold"
+         -- For incomprehensible reasons, fonts are listed by <families, in regular orderd> <styles, in reverse order>
+         -- In a more normal sys, this would be Fira Code Bold, Noto Color Emoji Regular
+       , font     = "Fira Code, Noto Color Emoji Regular, Bold"
        , bgColor  = "#000000"
        , fgColor  = "#ffffff"
        , alpha    = 128

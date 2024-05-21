@@ -8,12 +8,13 @@ My (Arch\*) Linux configuration files. These are arranged in the relative positi
 
 This repo contains configuration files for:
 
- - Bash      (Mostly to launch X on login, `~/.bashrc`, `~/.bash_profile`)
- - XMonad    (Used directly without a WM, launched automatically by `~/.xinitrc`)
- - XMobar    (`~/.config/xmobar/`)
- - XTerm     (`~/.Xresources`)
- - Vim       (`~/.vimrc`)
- - Alacritty (`~/.config/alacritty/alacritty.toml`)
+ - Bash        (Mostly to launch X on login, `~/.bashrc`, `~/.bash_profile`)
+ - XMonad      (Used directly without a WM, launched automatically by `~/.xinitrc`)
+ - XMobar      (`~/.config/xmobar/`)
+ - XTerm       (`~/.Xresources`)
+ - Vim         (`~/.vimrc`)
+ - Alacritty   (`~/.config/alacritty/alacritty.toml`)
+ - Font Config (`~/.config/fontconfig`)
 
 ## Required Software
 
@@ -38,4 +39,9 @@ In addition to the required software, some configuration files expect something 
 
  - `~/.wallpaper/current` - This should be an image to load as the current wallpaper (using feh). In practice, I store all my wallpapers in `~/.wallpaper` and symlink this to whichever I want to use.
  - `~/Screenshots` - The screenshot shortcuts in `~/.config/xmonoad/xmonad.hs`) put screenshots here
- - Fira Code - Font. Used by xterm (`~/.Xresources`) and xmobar (`~/.config/xmobar/`) at least. Installed anywhere such that X can access it.
+ - Fira Code - Font. Used by xterm (`~/.Xresources`), xmobar (`~/.config/xmobar/`) and set as the default monospace font. 
+ - Noto Color Emoji - Font. Set as fallback for all default font styles and specifically referred to in other places
+
+## Other Assorted Notes
+
+For reasons in order to make the custom default font settings work, add a symlink to `/user/share/fontconfig/config.avail` to `~/.config/fontconfig/conf.d/` under the same name
