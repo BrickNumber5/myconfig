@@ -7,8 +7,16 @@ set autoindent
 set nosmartindent
 set nocindent
 
-:set listchars=eol:¶,space:·,tab:-->,nbsp:#
+set listchars=eol:¶,space:·,tab:-->,nbsp:#
+highlight NonText ctermfg=darkgray
+highlight SpecialKey ctermfg=darkgray
 
-:inoremap <CR> <CR>x<BS>
+inoremap <CR> <CR>x<BS>
 
-:set bg=dark
+set bg=dark
+
+set number
+set relativenumber
+set numberwidth=6
+highlight LineNr ctermfg=darkmagenta
+highlight CursorLineNr ctermfg=magenta

@@ -97,7 +97,7 @@ customConfig = def
     , ("S-<XF86AudioRaiseVolume>", safeSpawn "pamixer" ["-i", "1", "--allow-boost"])
     ]
 
-customLayoutHook = threeColLayout ||| tiledLayout ||| Mirror tiledLayout ||| Full
+customLayoutHook = tiledLayout ||| threeColLayout ||| Mirror tiledLayout ||| Full
   where tiledLayout    = Tall        nmain delta mratioTiled
         threeColLayout = ThreeColMid nmain delta mratioThree
         nmain          = 1       -- Number of windows in main pane (1)
