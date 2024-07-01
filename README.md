@@ -42,6 +42,11 @@ In addition to the required software, some configuration files expect something 
  - Fira Code - Font. Used by xterm (`~/.Xresources`), xmobar (`~/.config/xmobar/`) and set as the default monospace font. 
  - Noto Color Emoji - Font. Set as fallback for all default font styles and specifically referred to in other places
 
+## Other Software
+
+(For the sake of having a record)
+ - `github-cli` - For github
+
 ## Other Assorted Notes
 
 For reasons in order to make the custom default font settings work, add a symlink to `/user/share/fontconfig/config.avail` to `~/.config/fontconfig/conf.d/` under the same name

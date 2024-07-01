@@ -1,7 +1,6 @@
 import XMonad
 
 import XMonad.Util.EZConfig
-import XMonad.Util.Ungrab
 import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 import qualified XMonad.Util.Dmenu as Dmenu
