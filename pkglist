@@ -1,0 +1,22 @@
+# GUI
+xmonad
+xmobar
+alacritty
+feh
+slock
+scrot
+dmenu
+
+pulseaudio
+pamixer
+
+# Fonts
+ttf-fira-code
+noto-fonts-emoji
+
+# Useful Software
+firefox
+python3
+gimp
+
+vim

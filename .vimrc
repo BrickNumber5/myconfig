@@ -6,6 +6,8 @@ set expandtab
 set autoindent
 set nosmartindent
 set nocindent
+filetype indent off
+filetype plugin off
 
 set listchars=eol:¶,space:·,tab:-->,nbsp:#
 highlight NonText ctermfg=darkgray
