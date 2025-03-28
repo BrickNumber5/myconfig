@@ -1,5 +1,10 @@
 # GUI
 xmonad
+xmonad-contrib
+xorg-server
+xorg-xinit
+xorg-xmessage # At least until I replace xmonad's error messaging
+
 xmobar
 alacritty
 feh
@@ -7,12 +12,22 @@ slock
 scrot
 dmenu
 
+# Backlight
+acpilight
+
+# Audio
 pulseaudio
+pulseaudio-alsa
 pamixer
 
 # Fonts
 ttf-fira-code
 noto-fonts-emoji
+
+# For a useful shell experience
+bash-completion
+man-db
+coreutils
 
 # Useful Software
 firefox

@@ -82,13 +82,13 @@ customConfig = def
     
     , ("<XF86Calculator>", runInTerm "" "python3")
     
-    , ("M-<Print>",   unGrab *> spawn "cd ~/Screenshots ; scrot")
-    , ("M-S-<Print>", unGrab *> spawn "cd ~/Screenshots ; scrot -s")
+    , ("M-<Print>",   unGrab *> spawn "cd ~/screenshots ; scrot")
+    , ("M-S-<Print>", unGrab *> spawn "cd ~/screenshots ; scrot -s")
     
     , ("M-S-s", safeSpawnProg "slock")
     
-    , ("<XF86MonBrightnessUp>",   safeSpawn "lux" ["-a", "5%"])
-    , ("<XF86MonBrightnessDown>", safeSpawn "lux" ["-s", "5%"])
+    , ("<XF86MonBrightnessUp>",   safeSpawn "xbacklight" ["-inc", "5"])
+    , ("<XF86MonBrightnessDown>", safeSpawn "xbacklight" ["-dec", "5"])
     
     , ("<XF86AudioMute>",          safeSpawn "pamixer" ["-t"])
     , ("<XF86AudioLowerVolume>",   safeSpawn "pamixer" ["-d", "1"])

@@ -39,4 +39,5 @@ fi
 
 export PATH="$PATH:$HOME/.local/bin"
 
+xmonad --recompile
 exec xmonad
