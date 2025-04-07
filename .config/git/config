@@ -1,0 +1,13 @@
+[init]
+    ; default to 'main' as a branch name
+    defaultBranch = main
+
+[credential]
+    ; Cache credentials for 1hr
+    helper = cache --timeout 3600
+
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+    ; Include github specific configuration
+    ; (specifically my name and email)
+    ; only in github repositories
+    path = github-specific-config
