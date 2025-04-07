@@ -11,6 +11,7 @@ feh
 slock
 scrot
 dmenu
+xclip
 
 # Backlight
 acpilight
@@ -35,3 +36,8 @@ python3
 gimp
 
 vim
+
+# Password Manager
+pass
+browserpass-firefox
+
