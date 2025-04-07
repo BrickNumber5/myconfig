@@ -35,7 +35,8 @@ firefox
 python3
 gimp
 
-vim
+gvim # I don't actually use gvim, but the vim that ships with gvim
+     # has support for the x clipboard and the default one doesn't
 
 # Password Manager
 pass
