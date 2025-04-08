@@ -16,8 +16,11 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 
+import XMonad.Util.Hacks
+
 main :: IO ()
 main = xmonad
+     . javaHack -- javax.swing assumes all wms reparent unless told otherwise and misbehaves wildly, tell it we don't
      . ewmh
      . docks
      . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
