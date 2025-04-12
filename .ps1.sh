@@ -1,5 +1,4 @@
 # TODO: Add git support
-# TODO: Log nonzero exit codes
 # TODO: Optimization -- if nothing has changed reuse past work
 
 # Dependencies: realpath, tput, grep, find
@@ -21,11 +20,13 @@ __bri_ps1__DYN_SIZE_Q=3  # P/Q for the prompt to take up
 # Colors
 __bri_ps1__CLR_FG=231
 __bri_ps1__CLR_BG=232
+__bri_ps1__CLR_NEGATIVE=196
 
 __bri_ps1__CLR_HOST=163
 __bri_ps1__CLR_USER=170
 __bri_ps1__CLR_PATH=213
-__bri_ps1__CLR_GIT=10
+__bri_ps1__CLR_GIT=111
+__bri_ps1__CLR_EXIT_CODE=231
 
 # Render the leading triangle
 #     Takes: <bg color #>
@@ -220,6 +221,9 @@ __bri_ps1__render_ps2() {
 
 # Render the ps1
 __bri_ps1__render() {
+    # Save the exit code
+    local exit_code="$?"
+    
     # Setup
     printf '\n'
     
@@ -227,9 +231,12 @@ __bri_ps1__render() {
                                    ? COLUMNS * __bri_ps1__DYN_SIZE_P / __bri_ps1__DYN_SIZE_Q : COLUMNS - __bri_ps1__DYN_SIZE_N ))
     
     # Prepare segments based on space
-    (( __bri_ps1__COLUMNS_SOFTMAX -= 2 ))                # The leading tri and trailing space
-    (( __bri_ps1__COLUMNS_SOFTMAX -= ${#HOSTNAME} + 3 )) # The fixed-size hostname segment
-    (( __bri_ps1__COLUMNS_SOFTMAX -= ${#USER} + 3 ))     # The fixed-size username segment
+    (( __bri_ps1__COLUMNS_SOFTMAX -= 2 ))                     # The leading tri and trailing space
+    (( __bri_ps1__COLUMNS_SOFTMAX -= ${#HOSTNAME} + 3 ))      # The fixed-size hostname segment
+    (( __bri_ps1__COLUMNS_SOFTMAX -= ${#USER} + 3 ))          # The fixed-size username segment
+    if (( "$exit_code" != 0 )); then
+        (( __bri_ps1__COLUMNS_SOFTMAX -= ${#exit_code} + 3 )) # The fixed-size exit code segment
+    fi
     
     # Prepare the path segment
     __bri_ps1__extract_path
@@ -242,16 +249,22 @@ __bri_ps1__render() {
     
     # Render the segments
     
-    # HOST
+    # Host
     __bri_ps1__render_segment_latch "$HOSTNAME" "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_HOST"
     
-    # USER
+    # User
     __bri_ps1__render_segment_latch "$USER" "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_USER"
     
-    # PATH
+    # Path
     __bri_ps1__render_path_latch "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_PATH"
     
     # TODO: Git
+    # __bri_ps1__render_segment_latch '? main' "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_GIT"
+    
+    # Exit Code
+    if (( "$exit_code" != 0 )); then
+        __bri_ps1__render_segment_latch "$exit_code" "$__bri_ps1__CLR_NEGATIVE" "$__bri_ps1__CLR_EXIT_CODE"
+    fi
     
     # Finish
     __bri_ps1__render_latched "$__bri_ps1__CLR_BG"
@@ -259,4 +272,6 @@ __bri_ps1__render() {
     tput sgr0
     printf '\2'
     printf "$__bri_ps1__CHAR_SPACE"
+    
+    return "$exit_code"
 }
