@@ -15,4 +15,6 @@ alias ssh='TERM=xterm-256color ssh'
 export EDITOR=/bin/vim
 
 # Set prompt
-PS1='[\u@\h \W]\$ '
+. ~/.ps1.sh
+PS1='$(__bri_ps1__render)'
+PS2='$(__bri_ps1__render_ps2)'
