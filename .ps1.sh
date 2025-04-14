@@ -228,10 +228,10 @@ __bri_ps1__extract_git() {
     __bri_ps1__git_segments[0]="$__bri_ps1__CHAR_GIT_INDICATOR $branch_name"
     
     # 2. Upstream divergence
-    local upstream_divergence="$(git rev-list --count --left-right @{upstream}...HEAD)"
+    local upstream_divergence="$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)"
     local ud_minus="${upstream_divergence%	*}"
     local ud_plus="${upstream_divergence#*	}"
-    if (( $? == 0 && ( ud_minus != 0 || ud_plus != 0 ) )); then
+    if [ -n upstream_divergence ] && (( ud_minus != 0 || ud_plus != 0 )); then
         if (( ud_plus != 0 )); then
             __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/+$ud_plus"
         fi
