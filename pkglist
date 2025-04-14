@@ -4,6 +4,8 @@ xmonad-contrib
 xorg-server
 xorg-xinit
 xorg-xmessage # At least until I replace xmonad's error messaging
+xorg-xrandr
+xorg-xsetroot
 
 xmobar
 alacritty
@@ -34,6 +36,7 @@ coreutils
 firefox
 python3
 gimp
+openssh
 
 gvim # I don't actually use gvim, but the vim that ships with gvim
      # has support for the x clipboard and the default one doesn't
