@@ -217,8 +217,8 @@ __bri_ps1__extract_git() {
     __bri_ps1__git_segments=()
     
     # 1. Find the branch name (and if we're in a git repository at all in the process
-    local head_short_sha="$(git rev-parse --short HEAD)"
-    [ "$?" == "0" ] || return 1 # Not in a git repo
+    local head_short_sha="$(git rev-parse --short HEAD 2>/dev/null)"
+    [ -n "$head_short_sha" ] || return 1 # Not in a git repo
     
     local branch_name=""
     branch_name="$(git symbolic-ref --short HEAD 2>/dev/null)" ||
