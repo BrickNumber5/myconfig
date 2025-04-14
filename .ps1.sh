@@ -233,12 +233,12 @@ __bri_ps1__extract_git() {
     local ud_plus="${upstream_divergence#*	}"
     if (( $? == 0 && ( ud_minus != 0 || ud_plus != 0 ) )); then
         if (( ud_plus != 0 )); then
-            __bri_ps1__git_segments[1]="+$ud_plus"
+            __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/+$ud_plus"
         fi
         if (( ud_minus != 0 )); then
-            [ -n __bri_ps1__git_segments[1] ] && __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/"
-            __bri_ps1__git_segments[1]="$__bri_ps1__git_segments[1]$ud_minus"
+            __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/-$ud_minus"
         fi
+        __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]#/}"
     fi
     
     # 3. TODO: Staged, unstaged, and untracked files
