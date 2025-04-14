@@ -11,6 +11,7 @@ __bri_ps1__CHAR_TRI_LINE=''
 __bri_ps1__CHAR_SPACE=' '
 __bri_ps1__CHAR_ELIPSIS='…'
 __bri_ps1__CHAR_NEWLINE_INDICATOR='↩'
+__bri_ps1__CHAR_GIT_INDICATOR=''
 
 # Dynamic sizing
 __bri_ps1__DYN_SIZE_N=35 # Where possible, the minimum number of characters to leave for the prompt
@@ -209,6 +210,50 @@ __bri_ps1__render_path_latch() {
     done
 }
 
+# Extract git VCS information
+__bri_ps1__extract_git() {
+    unset __bri_ps1__git_segments
+    declare -g -a __bri_ps1__git_segments
+    __bri_ps1__git_segments=()
+    
+    # 1. Find the branch name (and if we're in a git repository at all in the process
+    local head_short_sha="$(git rev-parse --short HEAD)"
+    [ "$?" == "0" ] || return 1 # Not in a git repo
+    
+    local branch_name=""
+    branch_name="$(git symbolic-ref --short HEAD 2>/dev/null)" ||
+    branch_name="($(git describe --contains --all HEAD 2>/dev/null))" ||
+    branch_name="($head_short_sha)"
+    
+    __bri_ps1__git_segments[0]="$__bri_ps1__CHAR_GIT_INDICATOR $branch_name"
+    
+    # 2. Upstream divergence
+    local upstream_divergence="$(git rev-list --count --left-right @{upstream}...HEAD)"
+    local ud_minus="${upstream_divergence%	*}"
+    local ud_plus="${upstream_divergence#*	}"
+    if (( $? == 0 && ( ud_minus != 0 || ud_plus != 0 ) )); then
+        if (( ud_plus != 0 )); then
+            __bri_ps1__git_segments[1]="+$ud_plus"
+        fi
+        if (( ud_minus != 0 )); then
+            [ -n __bri_ps1__git_segments[1] ] && __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/"
+            __bri_ps1__git_segments[1]="$__bri_ps1__git_segments[1]$ud_minus"
+        fi
+    fi
+    
+    # 3. TODO: Staged, unstaged, and untracked files
+    
+    # 4. TODO: Status keyword (e.g. MERGING)
+}
+
+# Render git VCS information
+#     Takes: <fg color #>, <bg color #>
+__bri_ps1__render_git_latch() {
+    for git_segment in "${__bri_ps1__git_segments[@]}"; do
+        __bri_ps1__render_segment_latch "$git_segment" "$1" "$2"
+    done
+}
+
 # Render the ps2
 __bri_ps1__render_ps2() {
     __bri_ps1__render_segment_latch '+' "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_HOST"
@@ -242,6 +287,10 @@ __bri_ps1__render() {
     __bri_ps1__extract_path
     __bri_ps1__sizehints_for_path
     
+    # Prepare the git segment
+    __bri_ps1__extract_git
+    
+    # Dynamically shrink shrinkable segments (path [TODO: and git])
     while ((    __bri_ps1__path_sizehint_max > __bri_ps1__path_sizehint_min
               && __bri_ps1__path_sizehint_max > __bri_ps1__COLUMNS_SOFTMAX   )); do
         __bri_ps1__shrink_path
@@ -258,8 +307,8 @@ __bri_ps1__render() {
     # Path
     __bri_ps1__render_path_latch "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_PATH"
     
-    # TODO: Git
-    # __bri_ps1__render_segment_latch '? main' "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_GIT"
+    # Git
+    __bri_ps1__render_git_latch "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_GIT"
     
     # Exit Code
     if (( "$exit_code" != 0 )); then
