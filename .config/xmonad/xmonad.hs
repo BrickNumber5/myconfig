@@ -23,6 +23,7 @@ main = xmonad
      . javaHack -- javax.swing assumes all wms reparent unless told otherwise and misbehaves wildly, tell it we don't
      . ewmh
      . docks
+     . addTray
      . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
              <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP))
      $ customConfig
@@ -115,7 +116,24 @@ customManageHook = composeAll
 
 customStartupHook :: X ()
 customStartupHook = do
-  spawn "feh --bg-fill --no-fehbg ~/.wallpaper/current"
+  runProcessWithInput "feh" ["--bg-fill", "--no-fehbg", ".wallpaper/current"] "" *> return ()
+
+  -- Add the tray
+addTray :: XConfig a -> XConfig a
+addTray cfg = cfg
+    { startupHook = startupHook cfg *> safeSpawn "trayer"
+        [ "--edge", "bottom"
+        , "--align", "right"
+        , "--SetDockType", "true"
+        , "--SetPartialStrut", "true"
+        , "--expand", "true"
+        , "--width", "15"
+        , "--transparent", "true"
+        , "--tint", "0x000000"
+        , "--height", "30"
+        , "--alpha", "128"
+        ]
+    }
 
  -- Utility to split strings
 split     :: (t -> Bool) -> [t] -> [[t]]
