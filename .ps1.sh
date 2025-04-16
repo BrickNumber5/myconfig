@@ -254,20 +254,33 @@ __bri_ps1__extract_git() {
     local num_unstaged_files="$(git diff --name-only | wc -l)"
     local num_untracked_files="$(git ls-files --others --exclude-standard | wc -l)"
     if (( num_staged_files != 0 || num_unstaged_files != 0 || num_untracked_files != 0 )); then
-        local files_segment=""
+        local files_segment=''
+        # This strategy uses eval (which is evil) but
+        # a) we quote the potentially dangerous characters and
+        # b) this is still faster than a lot of other solutions for small counts
+        #    (which are realistically most of what we will be running against)
         if (( num_staged_files != 0 )); then
-            if (( num_staged_files == 1 )); then num_staged_files=''; fi
-            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_STAGED_MRK$num_staged_files"
+            files_segment="$files_segment$(
+                eval "printf \"%.s$(
+                    printf '%q' "$__bri_ps1__CHAR_GIT_STAGED_MRK"
+                )\" {1..$num_staged_files}"
+            )"
         fi
         if (( num_unstaged_files != 0 )); then
-            if (( num_unstaged_files == 1 )); then num_unstaged_files=''; fi
-            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_UNSTAGED_MRK$num_unstaged_files"
+            files_segment="$files_segment$(
+                eval "printf \"%.s$(
+                    printf '%q' "$__bri_ps1__CHAR_GIT_UNSTAGED_MRK"
+                )\" {1..$num_unstaged_files}"
+            )"
         fi
         if (( num_untracked_files != 0 )); then
-            if (( num_untracked_files == 1 )); then num_untracked_files=''; fi
-            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_UNTRACKED_MRK$num_untracked_files"
+            files_segment="$files_segment$(
+                eval "printf \"%.s$(
+                    printf '%q' "$__bri_ps1__CHAR_GIT_UNTRACKED_MRK"
+                )\" {1..$num_untracked_files}"
+            )"
         fi
-        __bri_ps1__git_segments+=( "${files_segment#/}" )
+        __bri_ps1__git_segments+=( "$files_segment" )
     fi
     
     # 4. TODO: Status keyword (e.g. MERGING)
