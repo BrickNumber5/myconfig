@@ -5,6 +5,7 @@ import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Util.Run
+import qualified XMonad.Util.ExtensibleState as XS
 
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Spacing
@@ -17,6 +18,14 @@ import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 
 import XMonad.Util.Hacks
+
+import System.Posix.Types (ProcessID)
+import System.Posix.Process (createSession, executeFile, forkProcess)
+import System.Posix.Signals (sigTERM, signalProcessGroup)
+
+import Codec.Binary.UTF8.String (encodeString)
+
+import Control.Exception (SomeException, try)
 
 main :: IO ()
 main = xmonad
@@ -118,21 +127,33 @@ customStartupHook :: X ()
 customStartupHook = do
   runProcessWithInput "feh" ["--bg-fill", "--no-fehbg", ".wallpaper/current"] "" *> return ()
 
-  -- Add the tray
+  -- -- Trayer -- --
+newtype SavedTrayerPID = SavedTrayerPID { getPID :: Maybe ProcessID }
+  deriving (Show, Read)
+
+instance ExtensionClass SavedTrayerPID where
+  initialValue  = SavedTrayerPID Nothing
+  extensionType = PersistentExtension
+
+  -- Add trayer removing any previously existing trayer
 addTray :: XConfig a -> XConfig a
 addTray cfg = cfg
-    { startupHook = startupHook cfg *> safeSpawn "trayer"
-        [ "--edge", "bottom"
-        , "--align", "right"
-        , "--SetDockType", "true"
-        , "--SetPartialStrut", "true"
-        , "--expand", "true"
-        , "--width", "15"
-        , "--transparent", "true"
-        , "--tint", "0x000000"
-        , "--height", "30"
-        , "--alpha", "128"
-        ]
+    { startupHook = do
+        startupHook cfg
+        XS.gets getPID >>= flip whenJust (io . killPID)
+        pid <- safeSpawnPID "trayer"
+            [ "--edge", "bottom"
+            , "--align", "right"
+            , "--SetDockType", "true"
+            , "--SetPartialStrut", "true"
+            , "--expand", "true"
+            , "--width", "15"
+            , "--transparent", "true"
+            , "--tint", "0x000000"
+            , "--height", "30"
+            , "--alpha", "128"
+            ]
+        XS.put $ SavedTrayerPID $ Just pid
     }
 
  -- Utility to split strings
@@ -154,6 +175,20 @@ menu prompt options = Dmenu.menuArgs "dmenu"
     , "-sb", tmblack
     , "-sf", tmmagenta
     ] $ map (filter (/= '\n')) options
+
+ -- Alteration of XMonad.Util.Run.safeSpawn to return the process id
+safeSpawnPID :: MonadIO m => FilePath -> [String] -> m ProcessID
+safeSpawnPID prog args = io $ forkProcess $ do
+  uninstallSignalHandlers
+  _ <- createSession
+  executeFile (encodeString prog) True (map encodeString args) Nothing
+
+ -- Utlity to kill a process by PID
+ -- Mostly the same as XMonad.Hooks.StatusBar which uses this internally
+ -- (for more or less exactly the same reason we want it) but does not
+ -- export it.
+killPID :: ProcessID -> IO ()
+killPID pid = try @SomeException (signalProcessGroup sigTERM pid) *> return ()
 
  -- Theme Colors
 tmblack, tmgray, tmwhite, tmmagenta :: String
