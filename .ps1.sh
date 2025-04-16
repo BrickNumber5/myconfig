@@ -1,7 +1,7 @@
 # TODO: Add git support
 # TODO: Optimization -- if nothing has changed reuse past work
 
-# Dependencies: realpath, tput, grep, find
+# Dependencies: realpath, tput, grep, find, wc
 
 # We're using the powerline symbols here
 # I almostly exclusively use fira code which has built-in support for powerline
@@ -12,6 +12,9 @@ __bri_ps1__CHAR_SPACE=' '
 __bri_ps1__CHAR_ELIPSIS='…'
 __bri_ps1__CHAR_NEWLINE_INDICATOR='↩'
 __bri_ps1__CHAR_GIT_INDICATOR=''
+__bri_ps1__CHAR_GIT_STAGED_MRK='●'
+__bri_ps1__CHAR_GIT_UNSTAGED_MRK='◉'
+__bri_ps1__CHAR_GIT_UNTRACKED_MRK='○'
 
 # Dynamic sizing
 __bri_ps1__DYN_SIZE_N=35 # Where possible, the minimum number of characters to leave for the prompt
@@ -220,10 +223,15 @@ __bri_ps1__extract_git() {
     local head_short_sha="$(git rev-parse --short HEAD 2>/dev/null)"
     [ -n "$head_short_sha" ] || return 1 # Not in a git repo
     
+    # We try the branch name if there is one or, failing that for detached HEADs
+    # a future branch name with an offset (e.g. (main~2)) wrapped in parentheses
+    # to indicate the detached head state, or if that too fails the short sha
+    # (e.g. (453cd06…)) which should always work no matter how unusual the git
+    # state is.
     local branch_name=""
     branch_name="$(git symbolic-ref --short HEAD 2>/dev/null)" ||
     branch_name="($(git describe --contains --all HEAD 2>/dev/null))" ||
-    branch_name="($head_short_sha)"
+    branch_name="($head_short_sha$__bri_ps1__CHAR_ELIPSIS)"
     
     __bri_ps1__git_segments[0]="$__bri_ps1__CHAR_GIT_INDICATOR $branch_name"
     
@@ -241,7 +249,26 @@ __bri_ps1__extract_git() {
         __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]#/}"
     fi
     
-    # 3. TODO: Staged, unstaged, and untracked files
+    # 3. Staged, unstaged, and untracked files
+    local num_staged_files="$(git diff --name-only --staged | wc -l)"
+    local num_unstaged_files="$(git diff --name-only | wc -l)"
+    local num_untracked_files="$(git ls-files --others --exclude-standard | wc -l)"
+    if (( num_staged_files != 0 || num_unstaged_files != 0 || num_untracked_files != 0 )); then
+        local files_segment=""
+        if (( num_staged_files != 0 )); then
+            if (( num_staged_files == 1 )); then num_staged_files=''; fi
+            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_STAGED_MRK$num_staged_files"
+        fi
+        if (( num_unstaged_files != 0 )); then
+            if (( num_unstaged_files == 1 )); then num_unstaged_files=''; fi
+            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_UNSTAGED_MRK$num_unstaged_files"
+        fi
+        if (( num_untracked_files != 0 )); then
+            if (( num_untracked_files == 1 )); then num_untracked_files=''; fi
+            files_segment="$files_segment/$__bri_ps1__CHAR_GIT_UNTRACKED_MRK$num_untracked_files"
+        fi
+        __bri_ps1__git_segments+=( "${files_segment#/}" )
+    fi
     
     # 4. TODO: Status keyword (e.g. MERGING)
 }
