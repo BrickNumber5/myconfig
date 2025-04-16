@@ -39,7 +39,10 @@ coreutils
 firefox
 python3
 gimp
+inkscape
+blender
 openssh
+zip
 
 gvim # I don't actually use gvim, but the vim that ships with gvim
      # has support for the x clipboard and the default one doesn't
