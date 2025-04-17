@@ -42,3 +42,7 @@ prep() {
     rm "$sys_staging/.mini.pkglist"
     rm "$sys_staging/.additional.pkglist"
 }
+
+pull() {
+    cp "$sys_staging/pkglist" "$repo/pkglist"
+}

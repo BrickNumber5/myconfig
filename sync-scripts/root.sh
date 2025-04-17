@@ -9,3 +9,10 @@ prep() {
         cp "$root/$file" "$sys_staging/root/$file"
     done
 }
+
+pull() {
+    find "$sys_staging/root" ! -type d -printf '%P\0' |
+    while IFS= read -r -d $'\0' file; do
+        cp "$sys_staging/root/$file" "$repo/root/$file"
+    done
+}

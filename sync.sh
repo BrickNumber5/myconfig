@@ -21,6 +21,11 @@ case "$1" in
     (diff)
         git diff --no-index -- "$repo_staging" "$sys_staging"
     ;;
+    (pull)
+        for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
+            ( source "$script" && pull )
+        done
+    ;;
 esac
 
 # 4. Clean up staged
