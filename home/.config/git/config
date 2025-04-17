@@ -11,3 +11,8 @@
     ; (specifically my name and email)
     ; only in github repositories
     path = github-specific-config
+
+[include]
+    ; Include private config (not synced to github)
+    ; e.g. personal/work usernames, emails, and other settings
+    path = secret-config
