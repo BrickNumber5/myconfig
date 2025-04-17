@@ -33,7 +33,6 @@ noto-fonts-emoji
 # For a useful shell experience
 bash-completion
 man-db
-coreutils
 
 # Useful Software
 firefox
