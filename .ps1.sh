@@ -1,7 +1,6 @@
-# TODO: Add git support
 # TODO: Optimization -- if nothing has changed reuse past work
 
-# Dependencies: realpath, tput, grep, find, wc
+# Dependencies: realpath, tput, grep, find, wc, head
 
 # We're using the powerline symbols here
 # I almostly exclusively use fira code which has built-in support for powerline
@@ -16,6 +15,8 @@ __bri_ps1__CHAR_GIT_STAGED_MRK='●'
 __bri_ps1__CHAR_GIT_UNSTAGED_MRK='◉'
 __bri_ps1__CHAR_GIT_UNTRACKED_MRK='○'
 __bri_ps1__CHAR_GIT_CONFLICTED_MRK='∅'
+__bri_ps1__CHAR_ANGLE_BRACKET_L='⟨'
+__bri_ps1__CHAR_ANGLE_BRACKET_R='⟩'
 
 # Dynamic sizing
 __bri_ps1__DYN_SIZE_N=35 # Where possible, the minimum number of characters to leave for the prompt
@@ -226,9 +227,18 @@ __bri_ps1__extract_git() {
     declare -g -a __bri_ps1__git_segment_remove_order
     __bri_ps1__git_segment_remove_order=()
     
-    # 1. Find the branch name (and if we're in a git repository at all in the process
-    local head_short_sha="$(git rev-parse --short HEAD 2>/dev/null)"
-    [ -n "$head_short_sha" ] || return 1 # Not in a git repo
+    # 1. Find the branch name (and if we're in a git repository at all in the process)
+    #    as well as other basic info we happen to be able to pull at the same time we
+    #    may need later.
+    local git_info git_info_exit_code
+    git_info="$(git rev-parse --git-dir --is-inside-git-dir --short HEAD 2>/dev/null)"
+    git_info_exit_code="$?"
+    (( git_info_exit_code != 0 )) && return 1 # Not in a git repo
+    
+    local head_short_sha="${git_info##*$'\n'}"
+    git_info="${git_info%$'\n'*}"
+    local is_inside_git_dir="${git_info##*$'\n'}"
+    local git_dir="${git_info%$'\n'*}"
     
     # We try the branch name if there is one or, failing that for detached HEADs
     # a future branch name with an offset (e.g. (main~2)) wrapped in parentheses
@@ -242,6 +252,16 @@ __bri_ps1__extract_git() {
     
     __bri_ps1__git_segments[0]="$__bri_ps1__CHAR_GIT_INDICATOR $branch_name"
     __bri_ps1__git_segment_remove_order[0]='X'
+    
+    # 1a. If we are inside a git dir, we can't run any of the operations we want to for
+    #     further information. We could heuristically guess that the parent is the
+    #     worktree, but this may be incorrect for e.g. bare repositories and may produce
+    #     bad results. Instead, simply report this fact and bail.
+    if [ "$is_inside_git_dir" = true ]; then
+        __bri_ps1__git_segments[1]="$__bri_ps1__CHAR_ANGLE_BRACKET_L.git$__bri_ps1__CHAR_ANGLE_BRACKET_R"
+        __bri_ps1__git_segment_remove_order[1]='X'
+        return 2
+    fi
     
     # 2. Upstream divergence
     local upstream_divergence="$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)"
@@ -265,7 +285,7 @@ __bri_ps1__extract_git() {
     # Using grep -c(ount) x[whole lines] v[not in] f(ile) (the conflicting files) F[basic strings, not regexes]
     local num_unstaged_files="$(grep -cxvFf <(git diff --name-only --diff-filter=U) <(git diff --name-only))"
     local num_untracked_files="$(git ls-files --others --exclude-standard | wc -l)"
-    if (( num_staged_files != 0 || num_unstaged_files != 0 || num_untracked_files != 0 )); then
+    if (( num_staged_files != 0 || num_conflicted_files != 0 || num_unstaged_files != 0 || num_untracked_files != 0 )); then
         local files_segment=''
         # This strategy uses eval (which is evil) but
         # a) we quote the potentially dangerous characters and
@@ -303,7 +323,65 @@ __bri_ps1__extract_git() {
         __bri_ps1__git_segment_remove_order+=( 1 )
     fi
     
-    # 4. TODO: Status keyword (e.g. MERGING)
+    # 4. Status word (REBASING, MERGING, BISECTING, CHERRY PICKING, and REVERTING)
+    local status_word=''
+    local current_step total_steps
+    if [ -d "$git_dir/rebase-merge" ]; then
+        status_word='REBASING'
+        current_step="$(head -1 "$git_dir/rebase-merge/msgnum")"
+        total_steps="$(head -1 "$git_dir/rebase-merge/end")"
+    elif [ -d "$git_dir/rebase-apply" ]; then
+        status_word='REBASING'
+        current_step="$(head -1 "$git_dir/rebase-apply/next")"
+        total_steps="$(head -1 "$git_dir/rebase-apply/last")"
+    elif [ -f "$git_dir/MERGE_HEAD" ]; then
+        status_word='MERGING'
+    elif [ -f "$git_dir/BISECT_LOG" ]; then
+        status_word='BISECTING'
+    elif [ -f "$git_dir/CHERRY_PICK_HEAD" ]; then
+        status_word='CHERRY PICKING'
+    elif [ -f "$git_dir/REVERT_HEAD" ]; then
+        status_word='REVERTING'
+    elif [ -f "$git_dir/sequencer/todo" ]; then
+        # Under some (I'm not totally clear on) set of conditions, the cherry
+        # pick head or revert head can disappear even though you are still
+        # performing the operation in question. We can find this information
+        # by looking at the sequencer.
+        local sequencer_todo="$(head -1 "$git_dir/sequencer/todo")"
+        case "$sequencer_todo" in
+            (p*)
+                status_word='CHERRY PICKING'
+            ;;
+            (r*)
+                status_word='REVERTING'
+            ;;
+        esac
+    fi
+    
+    if [ -n "$status_word" ]; then
+        __bri_ps1__git_segments+=( "$status_word" )
+        __bri_ps1__git_segment_remove_order+=( 'X' )
+        
+        if [ -n "$current_step" ] && [ -n "$total_steps" ]; then
+            __bri_ps1__git_segments+=( "$current_step/$total_steps" )
+            __bri_ps1__git_segment_remove_order+=( '3' )
+        fi
+    fi
+    
+    # Things we explictly don't handle:
+    #   AM               -- I've never used it, never intend to, and so cannot
+    #                       be bothered to figure out how it works in enough
+    #                       detail to add support.
+    #   Sparse Checkouts -- This is a Microsofty extension for handling really
+    #                       big monorepos. I'm not much of a monorepo person
+    #                       and the implementation is really subject to change
+    #                       anyway making any support likely to quickly become
+    #                       out of date and stop working.
+    #   Bare Repos       -- I've never used them so I don't no how they work
+    #                       if at some point I need a bare repo I will probably
+    #                       add whatever support that needs.
+    #                       I think (but can't confirm) that the current
+    #                       tactics will work okay in a bare repo
 }
 
 # Determine the maximum and minimum length of the git segments
