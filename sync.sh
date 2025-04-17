@@ -3,7 +3,8 @@
 # 1. Initialize the critical variables
 root="${BRI_SYNC_ROOT:-/}"
 root="$(realpath "$root")"
-user="${BRI_SYNC_USER:-"$USER"}"
+user="${BRI_SYNC_USER:-"$SUDO_USER"}"
+user="${user:-"$USER"}"
 home="${BRI_SYNC_HOME:-"$(getent passwd "$user" | cut -d: -f6)"}"
 home="$(realpath "$home")"
 repo="${BRI_SYNC_REPO:-.}"
@@ -24,6 +25,11 @@ case "$1" in
     (pull)
         for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
             ( source "$script" && pull )
+        done
+    ;;
+    (push)
+        for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
+            ( source "$script" && push )
         done
     ;;
 esac

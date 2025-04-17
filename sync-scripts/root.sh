@@ -13,6 +13,14 @@ prep() {
 pull() {
     find "$sys_staging/root" ! -type d -printf '%P\0' |
     while IFS= read -r -d $'\0' file; do
-        cp "$sys_staging/root/$file" "$repo/root/$file"
+        cp -v "$sys_staging/root/$file" "$repo/root/$file"
+    done
+}
+
+push() {
+    find "$repo_staging/root" ! -type d -printf '%P\0' |
+    while IFS= read -r -d $'\0' file; do
+        cp -v "$repo_staging/root/$file" "$root/$file"
+        chown "root:" "$root/$file"
     done
 }
