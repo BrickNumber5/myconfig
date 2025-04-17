@@ -193,14 +193,17 @@ __bri_ps1__shrink_path() {
         #    remove the adjacent segment.
         if [ "${__bri_ps1__path_segments[target_index + 1]}" == "$__bri_ps1__CHAR_ELIPSIS" ]; then
             unset __bri_ps1__path_segments["$(( target_index + 1 ))"]
+            unset __bri_ps1__path_segment_min_prefix_lengths["$(( target_index + 1 ))"]
             (( __bri_ps1__path_sizehint_max -= 4 ))
         fi
         if [ "${__bri_ps1__path_segments[target_index - 1]}" == "$__bri_ps1__CHAR_ELIPSIS" ]; then
             unset __bri_ps1__path_segments["$(( target_index - 1 ))"]
+            unset __bri_ps1__path_segment_min_prefix_lengths["$(( target_index - 1 ))"]
             (( __bri_ps1__path_sizehint_max -= 4 ))
         fi
         
         __bri_ps1__path_segments=( "${__bri_ps1__path_segments[@]}" )
+        __bri_ps1__path_segment_min_prefix_lengths=( "${__bri_ps1__path_segment_min_prefix_lengths[@]}" )
     fi
 }
 
@@ -218,6 +221,9 @@ __bri_ps1__extract_git() {
     unset __bri_ps1__git_segments
     declare -g -a __bri_ps1__git_segments
     __bri_ps1__git_segments=()
+    unset __bri_ps1__git_segment_remove_order
+    declare -g -a __bri_ps1__git_segment_remove_order
+    __bri_ps1__git_segment_remove_order=()
     
     # 1. Find the branch name (and if we're in a git repository at all in the process
     local head_short_sha="$(git rev-parse --short HEAD 2>/dev/null)"
@@ -234,6 +240,7 @@ __bri_ps1__extract_git() {
     branch_name="($head_short_sha$__bri_ps1__CHAR_ELIPSIS)"
     
     __bri_ps1__git_segments[0]="$__bri_ps1__CHAR_GIT_INDICATOR $branch_name"
+    __bri_ps1__git_segment_remove_order[0]='X'
     
     # 2. Upstream divergence
     local upstream_divergence="$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)"
@@ -247,6 +254,7 @@ __bri_ps1__extract_git() {
             __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]}/-$ud_minus"
         fi
         __bri_ps1__git_segments[1]="${__bri_ps1__git_segments[1]#/}"
+        __bri_ps1__git_segment_remove_order[1]=2
     fi
     
     # 3. Staged, unstaged, and untracked files
@@ -281,9 +289,49 @@ __bri_ps1__extract_git() {
             )"
         fi
         __bri_ps1__git_segments+=( "$files_segment" )
+        __bri_ps1__git_segment_remove_order+=( 1 )
     fi
     
     # 4. TODO: Status keyword (e.g. MERGING)
+}
+
+# Determine the maximum and minimum length of the git segments
+# The info must already have been extracted, and must be unreduced
+__bri_ps1__sizehints_for_git() {
+    __bri_ps1__git_sizehint_max=0
+    for git_segment in "${__bri_ps1__git_segments[@]}"; do
+        (( __bri_ps1__git_sizehint_max += ${#git_segment} + 3 ))
+    done
+    
+    __bri_ps1__git_sizehint_min=0
+    for (( i = 0 ; i < ${#__bri_ps1__git_segments[*]} ; ++i )); do
+        if [ "${__bri_ps1__git_segment_remove_order[i]}" == 'X' ]; then
+            (( __bri_ps1__git_sizehint_min += ${#__bri_ps1__git_segments[i]} + 3 ))
+        fi
+    done
+}
+
+# Shrink the git VCS info
+# Assumes the info has already been extracted and hinted
+# and that the info can be shrunk
+__bri_ps1__shrink_git() {
+    # 1. Find the first segment to be removed
+    local target_index=0
+    local min_rm_order=1000000
+    for (( i = 1 ; i < ${#__bri_ps1__git_segments[*]} ; ++i )); do
+        local rm_order="${__bri_ps1__git_segment_remove_order[i]}" 
+        if [ "$rm_order" == 'X' ]; then continue; fi
+        if (( rm_order > min_rm_order )); then continue; fi
+        target_index="$i"
+        min_rm_order="$rm_order"
+    done
+    
+    # 2. Remove the segment
+    (( __bri_ps1__git_sizehint_max -= ${#__bri_ps1__git_segments[target_index]} + 3 ))
+    unset __bri_ps1__git_segments[target_index]
+    unset __bri_ps1__git_segment_remove_order[target_index]
+    __bri_ps1__git_segments=( "${__bri_ps1__git_segments[@]}" )
+    __bri_ps1__git_segment_remove_order=( "${__bri_ps1__git_segment_remove_order[@]}" )
 }
 
 # Render git VCS information
@@ -329,11 +377,34 @@ __bri_ps1__render() {
     
     # Prepare the git segment
     __bri_ps1__extract_git
+    __bri_ps1__sizehints_for_git
     
     # Dynamically shrink shrinkable segments (path [TODO: and git])
-    while ((    __bri_ps1__path_sizehint_max > __bri_ps1__path_sizehint_min
-              && __bri_ps1__path_sizehint_max > __bri_ps1__COLUMNS_SOFTMAX   )); do
-        __bri_ps1__shrink_path
+    while (( __bri_ps1__path_sizehint_max + __bri_ps1__git_sizehint_max > __bri_ps1__COLUMNS_SOFTMAX )); do
+        if ((    __bri_ps1__path_sizehint_max <= __bri_ps1__path_sizehint_min
+              && __bri_ps1__git_sizehint_max  <= __bri_ps1__git_sizehint_min  )); then break; fi
+        
+        # If the git segment is at least half the size of the path segment
+        # and can be shrunk, shrink it
+        if ((    __bri_ps1__git_sizehint_max * 2 >= __bri_ps1__path_sizehint_max
+              && __bri_ps1__git_sizehint_max > __bri_ps1__git_sizehint_min )); then
+            __bri_ps1__shrink_git
+            continue
+        fi
+        
+        # Otherwise if the path segment can be shrunk, shrink it
+        if (( __bri_ps1__path_sizehint_max > __bri_ps1__path_sizehint_min )); then
+            __bri_ps1__shrink_path
+            continue
+        fi
+        
+        # Otherwise if the git segment can be shrunk, shrink it
+        # (We hit this case if the path is very large but cannot be shrunk, e.g.
+        # when we are in a directory with a very long name)
+        if (( __bri_ps1__git_sizehint_max > __bri_ps1__git_sizehint_min )); then
+            __bri_ps1__shrink_git
+            continue
+        fi
     done
     
     # Render the segments
