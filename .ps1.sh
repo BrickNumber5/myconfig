@@ -15,6 +15,7 @@ __bri_ps1__CHAR_GIT_INDICATOR=''
 __bri_ps1__CHAR_GIT_STAGED_MRK='●'
 __bri_ps1__CHAR_GIT_UNSTAGED_MRK='◉'
 __bri_ps1__CHAR_GIT_UNTRACKED_MRK='○'
+__bri_ps1__CHAR_GIT_CONFLICTED_MRK='∅'
 
 # Dynamic sizing
 __bri_ps1__DYN_SIZE_N=35 # Where possible, the minimum number of characters to leave for the prompt
@@ -258,8 +259,11 @@ __bri_ps1__extract_git() {
     fi
     
     # 3. Staged, unstaged, and untracked files
-    local num_staged_files="$(git diff --name-only --staged | wc -l)"
-    local num_unstaged_files="$(git diff --name-only | wc -l)"
+    local num_staged_files="$(git diff --name-only --staged --diff-filter=u | wc -l)"
+    local num_conflicted_files="$(git diff --name-only --diff-filter=U | wc -l)"
+    # FIXME: Duplicate work between this and the previous, factor out
+    # Using grep -c(ount) x[whole lines] v[not in] f(ile) (the conflicting files) F[basic strings, not regexes]
+    local num_unstaged_files="$(grep -cxvFf <(git diff --name-only --diff-filter=U) <(git diff --name-only))"
     local num_untracked_files="$(git ls-files --others --exclude-standard | wc -l)"
     if (( num_staged_files != 0 || num_unstaged_files != 0 || num_untracked_files != 0 )); then
         local files_segment=''
@@ -272,6 +276,13 @@ __bri_ps1__extract_git() {
                 eval "printf \"%.s$(
                     printf '%q' "$__bri_ps1__CHAR_GIT_STAGED_MRK"
                 )\" {1..$num_staged_files}"
+            )"
+        fi
+        if (( num_conflicted_files != 0 )); then
+            files_segment="$files_segment$(
+                eval "printf \"%.s$(
+                    printf '%q' "$__bri_ps1__CHAR_GIT_CONFLICTED_MRK"
+                )\" {1..$num_conflicted_files}"
             )"
         fi
         if (( num_unstaged_files != 0 )); then
