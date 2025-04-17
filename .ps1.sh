@@ -1,4 +1,41 @@
-# TODO: Optimization -- if nothing has changed reuse past work
+# Bri PS1
+# A completely custom implemented prompt line for bash.
+# 
+# Why? Because I felt like it.
+#
+# What does it look like?
+# Something like this:
+# 
+#  compassion  brielle  ~  .config  myconfig   prompt-devel  +2/-1  ●●∅◉○  MERGING  ∫3  128 
+# 
+#  \----------/ \------/  \----------------------/ \--------------------------------------------/  \---/
+#   Host         User      Path                     Git VCS info                                    Exit Code
+#                          (auto compressed)       \-------------/  \----/  \-----/ \------/ \---/
+#                                                   |                |       |       |        Stashes
+#                                                   |                |       |       Status keyword (e.g. BISECTING)
+#                                                   |                |       Change tracker
+#                                                   |                |       ●  A staged change
+#                                                   |                |       ◉  An unstaged change
+#                                                   |                |       ○  An untracked (not ignored) file
+#                                                   |                |       ∅  A conflict
+#                                                   |                Upstream divergence
+#                                                   |                (+ local only commits/- remote only commits)
+#                                                   |                only displays +N or -N if only one directional
+#                                                   Indicates you are in a git repo, and the current branch name.
+#                                                   Makes a strong attempt to give a good name to the most recent
+#                                                   commit before giving up and reverting to the short sha in the
+#                                                   base case
+# 
+# In practice you rarely (if ever) have quite that much information and the prompt auto-compresses itself to
+# try to fit nicely in your terminal window so a real prompt often looks more like
+# 
+#  compassion  brielle  ~  .config  myconfig   prompt-devel  +1  ◉○ 
+# 
+# (this is in fact (ignoring the lack of coloring and usage of  to substitute) exactly what my prompt looks
+# like as I write this)
+# Or like
+#
+#  compassion  brielle  ~ 
 
 # Dependencies: realpath, tput, grep, find, wc, head
 
