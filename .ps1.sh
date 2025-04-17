@@ -15,6 +15,7 @@ __bri_ps1__CHAR_GIT_STAGED_MRK='●'
 __bri_ps1__CHAR_GIT_UNSTAGED_MRK='◉'
 __bri_ps1__CHAR_GIT_UNTRACKED_MRK='○'
 __bri_ps1__CHAR_GIT_CONFLICTED_MRK='∅'
+__bri_ps1__CHAR_GIT_STASH_INDICATOR='∫'
 __bri_ps1__CHAR_ANGLE_BRACKET_L='⟨'
 __bri_ps1__CHAR_ANGLE_BRACKET_R='⟩'
 
@@ -382,6 +383,13 @@ __bri_ps1__extract_git() {
     #                       add whatever support that needs.
     #                       I think (but can't confirm) that the current
     #                       tactics will work okay in a bare repo
+    
+    # 5. Stash
+    local num_stashes="$(git stash list | wc -l)"
+    if (( num_stashes != 0 )); then
+        __bri_ps1__git_segments+=( "$__bri_ps1__CHAR_GIT_STASH_INDICATOR$num_stashes" )
+        __bri_ps1__git_segment_remove_order+=( 0 )
+    fi
 }
 
 # Determine the maximum and minimum length of the git segments
