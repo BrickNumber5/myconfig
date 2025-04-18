@@ -1,3 +1,9 @@
 [user]
     name = BrickNumber5
     email = 79104486+BrickNumber5@users.noreply.github.com
+
+[credential]
+    ; So that organization account projects and personal account projects
+    ; don't try to store their credentials to the same place requiring me to clear
+    ; the credential cache all the time.
+    useHttpPath = true
