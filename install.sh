@@ -222,11 +222,10 @@ mkdir -p $D_GIT_TARGET_LOCAL_DIR
 git clone $D_GIT_REMOTE_URL $D_GIT_TARGET_LOCAL_DIR
 
 printf "[$PREFIX (chroot)] Installing pkglist from config repo...\n"
-pacman -S \$(sed '/^#/d;/^\s*$/d;s/#.*$//g;s/\s*//g' $D_GIT_TARGET_LOCAL_DIR/pkglist | tr '\n' ' ')
+sed '/^#/d;/^\s*$/d;s/#.*$//g;s/\s*//g' $D_GIT_TARGET_LOCAL_DIR/pkglist | pacman -S -
 
 printf "[$PREFIX (chroot)] Pushing config to system...\n"
-find $D_GIT_TARGET_LOCAL_DIR -mindepth 1 -maxdepth 1 -name '.*' ! -name '.git*' -exec cp -rv {} ./ \;
-find $D_GIT_TARGET_LOCAL_DIR/root -mindepth 1 -maxdepth 1 -exec cp -rv {} / \;
+BRI_SYNC_ROOT=/ BRI_SYNC_USER="$username" BRI_SYNC_REPO="$D_GIT_TARGET_LOCAL_DIR" "$D_GIT_TARGET_LOCAL_DIR/sync.sh" push
 
 printf "[$PREFIX (chroot)] Symlinking font conf...\n"
 mkdir -p .config/fontconfig/config.d
