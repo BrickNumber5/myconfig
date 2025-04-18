@@ -54,9 +54,12 @@ prep() {
 }
 
 pull() {
+    if cmp --quiet -- "$sys_staging/pkglist" "$repo/pkglist"; then return; fi
     cp -v "$sys_staging/pkglist" "$repo/pkglist"
 }
 
 push() {
-    cat "$sys_staging/.repo-only.pkglist" | pacman -Syu -
+    if [ -s "$sys_staging/.repo-only.pkglist" ]; then
+        cat "$sys_staging/.repo-only.pkglist" | pacman -Syu -
+    fi
 }

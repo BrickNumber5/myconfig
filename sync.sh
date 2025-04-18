@@ -12,23 +12,31 @@ repo="$(realpath "$repo")"
 sys_staging="$(mktemp --directory)"
 repo_staging="$(mktemp --directory)"
 
+printf 'Running sync ...\n'
+
 # 2. Stage files
-for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
+for script in $(find "$repo/sync-scripts" -mindepth 1 -print | LC_ALL=C sort); do
+    printf 'Preparing to sync using %s...\n' "$script"
     ( source "$script" && prep )
 done
 
 # 3. Command based behavior
 case "$1" in
     (diff)
+        printf 'Diffing sync perparations...\n'
         git diff --no-index -- "$repo_staging" "$sys_staging"
     ;;
     (pull)
-        for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
+        printf 'Pulling changes from the system...\n'
+        for script in $(find "$repo/sync-scripts" -mindepth 1 -print | LC_ALL=C sort); do
+            printf 'Pulling changes using %s...\n' "$script"
             ( source "$script" && pull )
         done
     ;;
     (push)
-        for script in $(find "$repo/sync-scripts" -mindepth 1 -print); do
+        printf 'Pushing changes to the system...\n'
+        for script in $(find "$repo/sync-scripts" -mindepth 1 -print | LC_ALL=C sort); do
+            printf 'Pushing changes using %s...\n' "$script"
             ( source "$script" && push )
         done
     ;;
