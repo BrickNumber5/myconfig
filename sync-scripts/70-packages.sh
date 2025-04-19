@@ -56,6 +56,7 @@ prep() {
 pull() {
     if cmp --quiet -- "$sys_staging/pkglist" "$repo/pkglist"; then return; fi
     cp -v "$sys_staging/pkglist" "$repo/pkglist"
+    chown "$user:" "$repo/pkglist"
 }
 
 push() {
