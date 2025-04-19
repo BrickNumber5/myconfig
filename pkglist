@@ -49,10 +49,15 @@ gvim # I don't actually use gvim, but the vim that ships with gvim
 
 xdg-utils # For xdg-open, etc.
 
-# Programming Languages
+## Programming Languages
 jdk-openjdk
 
-# Password Manager
+## Password Manager
 pass
 browserpass-firefox
 
+## TeXLive (LaTeX, mostly)
+texlive-latex
+texlive-latexextra
+texlive-latexrecommended
+texlive-mathscience
