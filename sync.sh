@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 1. Initialize the critical variables
 root="${BRI_SYNC_ROOT:-/}"

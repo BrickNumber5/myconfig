@@ -1,0 +1,28 @@
+/* userChrome.css
+ * 
+ * CSS applied directly to the browser's own internal UI.
+ * If that sounds extremely hacky and unstable that's because it is, and can
+ * just stop working altogether between different Firefox versions.
+ * Fortunately,
+ *   a) I don't use this too heavily
+ *      and
+ *   b) These are style tweaks so the worst possible outcome is that they make
+ *      the browser horrendous looking and mechanically unusable, a problem
+ *      that can be hotfixed by just turning them off and reverting to the
+ *      out-of-box Firefox experience.
+ */
+
+/* Removes the 'Seach with <engine> or enter an address' text in the urlbar.
+ * Particularly useful if you (like me) disable searching by default which
+ * makes the normal placeholder text not only useless but also incorrect.
+ */
+.urlbar-input, .searchbar-textbox {
+    /* All of my web-dev instincts are saying "You can't use nesting, it's
+     * too new, think of the compatibility issues!" But of course, we're
+     * modifying the browser itself, we know the browser supports CSS nesting
+     * because its our browser so we can use whatever modern features we please
+     */
+    &::placeholder {
+        color: transparent;
+    }
+}

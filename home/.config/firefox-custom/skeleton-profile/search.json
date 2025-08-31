@@ -1,0 +1,543 @@
+{
+    "version": 12,
+    "engines": [
+        {
+            "id": "google",
+            "_name": "Google",
+            "_isAppProvided": true,
+            "_metaData": {
+                "order": 1
+            }
+        },
+        {
+            "id": "amazondotcom-us",
+            "_name": "Amazon.com",
+            "_isAppProvided": true,
+            "_metaData": {
+                "hidden": true,
+                "order": 3
+            }
+        },
+        {
+            "id": "bing",
+            "_name": "Bing",
+            "_isAppProvided": true,
+            "_metaData": {
+                "hideOneOffButton": false,
+                "order": 2
+            }
+        },
+        {
+            "id": "ddg",
+            "_name": "DuckDuckGo",
+            "_isAppProvided": true,
+            "_metaData": {
+                "order": 4
+            }
+        },
+        {
+            "id": "wikipedia",
+            "_name": "Wikipedia (en)",
+            "_isAppProvided": true,
+            "_metaData": {
+                "order": 6
+            }
+        },
+        {
+            "id": "ebay",
+            "_name": "eBay",
+            "_isAppProvided": true,
+            "_metaData": {
+                "hideOneOffButton": true,
+                "hidden": true,
+                "order": 5
+            }
+        },
+        {
+            "id": "7de97ce1-704a-477f-a4a6-8a60b92b1c4d",
+            "_name": "Minecraft Wiki (EN)",
+            "_loadPath": "[https]minecraft.wiki/minecraft-wiki-en.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,mcwiki-16.ico",
+                "32": "sidecar:image/x-icon,mcwiki-32.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "HU2MlcKxdpxg/A8d5wyvzHI7VrIypC84Xenbn+OkEo4=",
+                "order": 7,
+                "alias": "@mcwiki",
+                "hideOneOffButton": false
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://minecraft.wiki/w/Special:Search",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://minecraft.wiki/w/Special:Search?search={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://minecraft.wiki/api.php?action=opensearch&search={searchTerms}&namespace=0|10000|10002|10004|10006|10010|10012&maxage=600&smaxage=600&uselang=content",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://minecraft.wiki/api.php?action=opensearch&format=xml&search={searchTerms}&namespace=0|10000|10002|10004|10006|10010|10012&maxage=600&smaxage=600&uselang=content",
+                    "type": "application/x-suggestions+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "e9d05b56-dc99-4d8b-a9ed-42e4193d0c43",
+            "_name": "MDN Web Docs",
+            "_loadPath": "[https]developer.mozilla.org/mdn-web-docs.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,mdn-16.ico",
+                "48": "sidecar:image/png,mdn-48.png"
+            },
+            "_metaData": {
+                "loadPathHash": "KA/LZQQx/Fh9ZEefFDPnJdSNtd+uHdD4o2FBLmJ8Ev4=",
+                "order": 8,
+                "alias": "@mdn"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://developer.mozilla.org/search?q={searchTerms}"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "2d688c51-2c54-4357-bed4-d59c82077b22",
+            "_name": "Arch Packages",
+            "_loadPath": "[https]archlinux.org/arch-packages.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/png,arpkgs-16.png",
+                "64": "sidecar:image/png,arpkgs-64.png"
+            },
+            "_metaData": {
+                "loadPathHash": "f244Vzud3/bWbuQSHLy3CzY0MriKW5TAWG8fyKnDApw=",
+                "updateexpir": 1743887489784,
+                "order": 9,
+                "alias": "@arpkgs"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "e42cc2b4-cd73-40e2-953e-86e0f3707ad3",
+            "_name": "ArchWiki (en)",
+            "_loadPath": "[https]wiki.archlinux.org/archwiki-en.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/png,arwiki-16.png"
+            },
+            "_metaData": {
+                "loadPathHash": "mI5MoCSZ30DBiG8eAvO/HtUwHSZ5SHsU5/ZIssiBIpk=",
+                "order": 10,
+                "alias": "@arwiki"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://wiki.archlinux.org/title/Special:Search",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://wiki.archlinux.org/index.php?title=Special:Search&search={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://wiki.archlinux.org/api.php?action=opensearch&search={searchTerms}&namespace=0|3000",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://wiki.archlinux.org/api.php?action=opensearch&format=xml&search={searchTerms}&namespace=0|3000",
+                    "type": "application/x-suggestions+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "331535da-eced-47c4-acfc-45388a822c15",
+            "_name": "GitHub",
+            "_loadPath": "[https]github.com/github.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,gh-16.ico",
+                "32": "sidecar:image/svg+xml,gh-32.svg"
+            },
+            "_metaData": {
+                "loadPathHash": "U4XZZGoJ5TiTmVS3Eu4LqLqY43FXsaJ+TU8Ay05khtk=",
+                "order": 11,
+                "alias": "@gh"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://github.com/search",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://github.com/search?q={searchTerms}&ref=opensearch"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "e2f1efc7-3dd7-4b13-aa21-8c7d69e928b5",
+            "_name": "Rust Documentation",
+            "_loadPath": "[https]mycroftproject.com/rust-documentation.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,ruststd-16.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "EG8KOJvSCFtP2FbueA7QzmAsZfm1sYko7kxVGnGZTwQ=",
+                "updateexpir": 1745254367688,
+                "order": 12,
+                "alias": "@ruststd"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://doc.rust-lang.org/std/",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://doc.rust-lang.org/std/?search={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://mycroftproject.com/updateos.php/id0/docs-rust-lang.xml",
+                    "type": "application/opensearchdescription+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "e36e503d-f517-4a1d-9857-94c924f82f8b",
+            "_name": "caniuse",
+            "_loadPath": "[https]caniuse.com/caniuse.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/png,caniuse-16.png",
+                "128": "sidecar:image/png,caniuse-128.png"
+            },
+            "_metaData": {
+                "loadPathHash": "7bhCM/pjInar8i0iNfBHQ/hSB+glSehy9kmjzCClIws=",
+                "updateexpir": 1745255135479,
+                "order": 13,
+                "alias": "@caniuse"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://caniuse.com/",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://caniuse.com/?search={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://caniuse.com/opensearch.xml",
+                    "type": "application/opensearchdescription+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "032f9a6b-d27e-43b2-bb1b-0c646417d800",
+            "_name": "Stack Overflow",
+            "_loadPath": "[https]stackoverflow.com/stack-overflow.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,stackoverflow-16.ico",
+                "32": "sidecar:image/x-icon,stackoverflow-32.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "ELxFxPKwu+vhhJ51RJAuAAu6KjIirdCatd2KHqRUzMc=",
+                "order": 14,
+                "alias": "@stackoverflow"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://stackoverflow.com/search?q={searchTerms}"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "df0dbd06-c2ab-470d-abb8-6f2189790237",
+            "_name": "Wikimedia Commons",
+            "_loadPath": "[https]commons.wikimedia.org/wikimedia-commons.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,commons-16.ico",
+                "48": "sidecar:image/x-icon,commons-48.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "UX45NX8my3mX/ucCmsLhSsnzRbSh6nNvfDoVXoHoPWk=",
+                "order": 15,
+                "alias": "@commons"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://commons.wikimedia.org/wiki/Special:Search",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://commons.wikimedia.org/w/index.php?title=Special:Search&search={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://commons.wikimedia.org/w/api.php?action=opensearch&search={searchTerms}&namespace=6|12|14|100|106|0",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://commons.wikimedia.org/w/api.php?action=opensearch&format=xml&search={searchTerms}&namespace=6|12|14|100|106|0",
+                    "type": "application/x-suggestions+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "f7b0ef62-1be4-4aba-b80a-848c0ec73196",
+            "_name": "PyPI",
+            "_loadPath": "[https]pypi.org/pypi.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,pypi-16.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "QuZcJiys2YK0zikn0S1BN4cfSienSKA/+9HwKCy5ATE=",
+                "order": 16,
+                "alias": "@pypi"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://pypi.org/search/?q={searchTerms}"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "365a696b-2637-4540-83bf-e26973af4729",
+            "_name": "crates.io",
+            "_loadPath": "[https]crates.io/cratesio.xml",
+            "_iconMapObj": {
+                "48": "sidecar:image/x-icon,crates-48.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "9Uk6pfcbBoo5fjt/qnVaXqse7LQ6tf7vvx/gCER8yUY=",
+                "order": 17,
+                "alias": "@crates"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://crates.io/search?q={searchTerms}"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "b73fb380-70ef-438e-b43d-274211bf5c13",
+            "_name": "Arch Linux AUR",
+            "_loadPath": "[https]mycroftproject.com/arch-linux-aur.xml",
+            "_iconMapObj": {
+                "16": "sidecar:image/x-icon,aur-16.ico"
+            },
+            "_metaData": {
+                "loadPathHash": "6DkwZipXRURcSkTQPwJxTM/BhQoRlW3E/KZewZbhWJo=",
+                "updateexpir": 1745528816041,
+                "order": 18,
+                "alias": "@aur"
+            },
+            "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://aur.archlinux.org/packages/",
+                    "type": "searchform"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://aur.archlinux.org/packages/?K={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://aur.archlinux.org/rpc?type=suggest&arg={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://mycroftproject.com/updateos.php/id0/archlinux-aur.xml",
+                    "type": "application/opensearchdescription+xml"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": [],
+            "_updateInterval": null,
+            "_updateURL": null
+        },
+        {
+            "id": "93fd78db-94a9-4662-8277-917735b071d1",
+            "_name": "PostgreSQL Documentation",
+            "_loadPath": "[user]",
+            "_iconMapObj": {
+                "16": "sidecar:image/png,psql-16.png"
+            },
+            "_metaData": {
+                "alias": "@psql",
+                "order": 19
+            },
+            "_urls": [
+                {
+                    "params": [
+                        {
+                            "name": "q",
+                            "value": "{searchTerms}"
+                        }
+                    ],
+                    "rels": [],
+                    "template": "https://www.postgresql.org/search/"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
+            "_definedAliases": []
+        }
+    ],
+    "metaData": {
+        "useSavedOrder": true,
+        "locale": "en-US",
+        "region": "US",
+        "channel": "release",
+        "experiment": "",
+        "distroID": "archlinux",
+        "appDefaultEngineId": "google",
+        "defaultEngineId": "ddg",
+        "defaultEngineIdHash": "tk3DL77teEdc+02JLOUlFg13EKG5Akc544vAzkMlEUw="
+    }
+}
