@@ -16,6 +16,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.InsertPosition
 
 import XMonad.Util.Hacks
 
@@ -62,7 +63,7 @@ customXmobarPP = def
 customConfig = def
     { modMask     = mod4Mask   -- Rebind Mod to the Super Key (So I can actually use [Alt] for normal things)
     , layoutHook  = avoidStruts $ spacingWithEdge 3 $ customLayoutHook
-    , manageHook  = customManageHook
+    , manageHook  = insertPosition Below Newer <+> customManageHook
     , startupHook = customStartupHook
     , borderWidth = 2
     , focusedBorderColor = tmmagenta
