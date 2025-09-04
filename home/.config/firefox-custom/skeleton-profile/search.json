@@ -526,6 +526,58 @@
             ],
             "_orderHint": null,
             "_telemetryId": null,
+            "_filePath": null,
+            "_definedAliases": []
+        },
+        {
+            "id": "3e4ed55c-d495-49e6-983a-d64312598923",
+            "_name": "Arch Linux Forums",
+            "_loadPath": "[user]",
+            "_iconMapObj": {
+                "16": "sidecar:image/png,arbbs-16.png"
+            },
+            "_metaData": {
+                "alias": "@arbbs",
+                "order": 20
+            },
+            "_urls": [
+                {
+                    "params": [
+                        {
+                            "name": "action",
+                            "value": "search"
+                        },
+                        {
+                            "name": "keywords",
+                            "value": "{searchTerms}"
+                        },
+                        {
+                            "name": "author",
+                            "value": ""
+                        },
+                        {
+                            "name": "search_in",
+                            "value": "0"
+                        },
+                        {
+                            "name": "sort_by",
+                            "value": "0"
+                        },
+                        {
+                            "name": "sort_dir",
+                            "value": "DESC"
+                        },
+                        {
+                            "name": "show_as",
+                            "value": "topics"
+                        }
+                    ],
+                    "rels": [],
+                    "template": "https://bbs.archlinux.org/search.php"
+                }
+            ],
+            "_orderHint": null,
+            "_telemetryId": null,
             "_definedAliases": []
         }
     ],
