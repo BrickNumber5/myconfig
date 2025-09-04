@@ -6,7 +6,7 @@ prep() {
         mkdir -p "$(dirname "$repo_staging/home/$file")"
         cp "$repo/home/$file" "$repo_staging/home/$file"
         mkdir -p "$(dirname "$sys_staging/home/$file")"
-        cp "$home/$file" "$sys_staging/home/$file"
+        [ -e "$home/$file" ] && cp "$home/$file" "$sys_staging/home/$file"
     done
 }
 
@@ -15,8 +15,10 @@ pull() {
     while IFS= read -r -d $'\0' file; do
         mkdir -p "$(dirname "$repo/home/$file")"
         if cmp --quiet -- "$sys_staging/home/$file" "$repo/home/$file"; then continue; fi
-        cp -v "$sys_staging/home/$file" "$repo/home/$file"
-        chown "$user:" "$home/$file"
+        if [ -e "$sys_staging/home/$file" ]; then
+            cp -v "$sys_staging/home/$file" "$repo/home/$file"
+            chown "$user:" "$repo/home/$file"
+        fi
     done
 }
 
