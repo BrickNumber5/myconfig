@@ -96,8 +96,8 @@ customConfig = def
     
     , ("<XF86Calculator>", runInTerm "" "python3")
     
-    , ("M-<Print>",   unGrab *> spawn "cd ~/screenshots ; scrot")
-    , ("M-S-<Print>", unGrab *> spawn "cd ~/screenshots ; scrot -s")
+    , ("M-<Print>",   unGrab *> safeSpawn "scrot" ["--file", scrotFormat])
+    , ("M-S-<Print>", unGrab *> safeSpawn "scrot" ["--file", scrotFormat, "--select"])
     
     , ("M-S-s", safeSpawnProg "slock")
     
@@ -190,6 +190,10 @@ safeSpawnPID prog args = io $ forkProcess $ do
  -- export it.
 killPID :: ProcessID -> IO ()
 killPID pid = try @SomeException (signalProcessGroup sigTERM pid) *> return ()
+
+ -- Format string for scrot
+scrotFormat :: String
+scrotFormat =  "screenshots/%Y-%m-%d_%H.%M.%S_$wx$h_$a_screenshot.png"
 
  -- Theme Colors
 tmblack, tmgray, tmwhite, tmmagenta :: String
