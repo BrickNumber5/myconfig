@@ -26,3 +26,24 @@
         color: transparent;
     }
 }
+
+/* Removes the 'Unified Search' badge from the urlbar.
+ * In combination with the previous rule makes the urlbar completely clean when
+ * empty which I prefer.
+ */
+#urlbar:not([searchmode]) #urlbar-searchmode-switcher {
+    /* In principle we could just use display: none; but then the text entered
+     * into the urlbar would slam into the left hand side since this provides a
+     * margin, gap, or something that provides the needed space on its right.
+     * 
+     * I could spend the time to track down what exactly causes the gap and
+     * then replicate it, and then additional maintenence time updating that if
+     * it ever changes but I opted to just make it completely empty so it can
+     * still provide the gap. I suspect this strategy will be more robust.
+     */
+    width: 0;
+    padding: 0 !important;
+    & * {
+        display: none;
+    }
+}
