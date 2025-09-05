@@ -33,6 +33,7 @@ main = xmonad
      . javaHack -- javax.swing assumes all wms reparent unless told otherwise and misbehaves wildly, tell it we don't
      . ewmh
      . docks
+     . unclutter
      . addTray
      . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
              <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP))
@@ -155,6 +156,29 @@ addTray cfg = cfg
             , "--alpha", "128"
             ]
         XS.put $ SavedTrayerPID $ Just pid
+    }
+
+  -- -- Unclutter -- --
+newtype SavedUnclutterPID = SavedUnclutterPID { getUnclutterPID :: Maybe ProcessID }
+  deriving (Show, Read)
+
+instance ExtensionClass SavedUnclutterPID where
+  initialValue  = SavedUnclutterPID Nothing
+  extensionType = PersistentExtension
+
+  -- Activate unclutter removing any previously existing unclutter
+unclutter :: XConfig a -> XConfig a
+unclutter cfg = cfg
+    { startupHook = do
+        startupHook cfg
+        XS.gets getUnclutterPID >>= flip whenJust (io . killPID)
+        pid <- safeSpawnPID "unclutter"
+            [ "--jitter", "15"
+            , "--ignore-buttons", "4,5,6,7"
+            , "--start-hidden"
+            , "--timeout", "1"
+            ]
+        XS.put $ SavedUnclutterPID $ Just pid
     }
 
  -- Utility to split strings
