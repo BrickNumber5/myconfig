@@ -34,15 +34,18 @@ noto-fonts-emoji
 # For a useful shell experience
 bash-completion
 man-db
+man-pages
 
 # Useful Software
 firefox
-python3
+
 gimp
 inkscape
 fontforge
 blender
+
 openssh
+
 zip
 unzip
 
@@ -51,7 +54,16 @@ gvim # I don't actually use gvim, but the vim that ships with gvim
 
 xdg-utils # For xdg-open, etc.
 
+qrencode
+graphviz
+
+docker
+docker-buildx
+
+postgresql
+
 ## Programming Languages
+python3
 jdk-openjdk
 
 ## Password Manager
