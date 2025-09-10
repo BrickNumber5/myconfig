@@ -19,6 +19,13 @@ inoremap <CR> <CR>x<BS>
 nnoremap o ox<BS>
 nnoremap O Ox<BS>
 
+" Alter the behavior of space to strip trailing whitespace from the line
+function! g:VimrcClearTrailingWhitespace()
+  s/\s*$//
+endfunction
+noremap <Space> :call g:VimrcClearTrailingWhitespace()<CR>
+noremap g<Space> :%call g:VimrcClearTrailingWhitespace()<CR>
+
 set bg=dark
 
 set number
