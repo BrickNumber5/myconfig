@@ -16,6 +16,8 @@ highlight NonText ctermfg=darkgray
 highlight SpecialKey ctermfg=darkgray
 
 inoremap <CR> <CR>x<BS>
+nnoremap o ox<BS>
+nnoremap O Ox<BS>
 
 set bg=dark
 
