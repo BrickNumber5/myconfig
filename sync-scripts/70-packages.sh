@@ -25,7 +25,7 @@ prep() {
         
         # Keep lines that contain a package that is explictly installed
         local resolved_package_name
-        resolved_package_name="$(pacman -Qe "$package_name" 2>/dev/null)"
+        resolved_package_name="$(pacman -Qen "$package_name" 2>/dev/null)"
         if [ "$?" == 0 ]; then
             printf '%s\n' "$line" >> "$sys_staging/pkglist"
             printf '%s\n' "$resolved_package_name" >> "$sys_staging/.mini.pkglist"
@@ -41,7 +41,7 @@ prep() {
     tr ' ' $'\n' | pacman -Qe base - >> "$sys_staging/.mini.pkglist"
     
     # Find explictly installed packages not in pkglist
-    pacman -Qe | grep -xvFf "$sys_staging/.mini.pkglist" - > "$sys_staging/.sys-only.pkglist"
+    pacman -Qen | grep -xvFf "$sys_staging/.mini.pkglist" - > "$sys_staging/.sys-only.pkglist"
     
     if [ -s "$sys_staging/.sys-only.pkglist" ]; then
         printf '\n# New Packages\n' >> "$sys_staging/pkglist"
