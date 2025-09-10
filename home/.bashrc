@@ -14,6 +14,9 @@ alias ssh='TERM=xterm-256color ssh'
 # Set common environment variables
 export EDITOR=/bin/vim
 
+# Make vim the manpager
+export MANPAGER='vim -MR +MANPAGER --not-a-term -'
+
 # Set prompt
 . ~/.ps1.sh
 PS1='$(__bri_ps1__render)'
