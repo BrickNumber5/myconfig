@@ -29,6 +29,18 @@ prep() {
             # Store the canonical path in the corresponding $repo_staging location
             mkdir -p $(dirname "$repo_staging/firefox-custom/$profile/$file")
             printf '%s\n' "$canonical_path" > "$repo_staging/firefox-custom/$profile/$file"
+            
+            # As a rendering convienience, if the files have the same contents
+            # don't include in the diff.
+            if ! cmp --quiet -- \
+                     "$repo_staging/firefox-custom/$profile/$file" \
+                     "$sys_staging/firefox-custom/$profile/$file"; then
+                if cmp --quiet -- \
+                       "$(< "$repo_staging/firefox-custom/$profile/$file")" \
+                       "$(< "$sys_staging/firefox-custom/$profile/$file")"; then
+                    printf '%s\n' "$canonical_path" > "$sys_staging/firefox-custom/$profile/$file"
+                fi
+            fi
         done
     done
 }
