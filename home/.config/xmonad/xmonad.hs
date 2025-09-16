@@ -20,6 +20,8 @@ import XMonad.Hooks.InsertPosition
 
 import XMonad.Util.Hacks
 
+import System.Directory (listDirectory)
+import System.IO (readFile')
 import System.Posix.Types (ProcessID)
 import System.Posix.Process (createSession, executeFile, forkProcess)
 import System.Posix.Signals (sigTERM, signalProcessGroup)
@@ -102,8 +104,8 @@ customConfig = def
     
     , ("M-S-s", safeSpawnProg "slock")
     
-    , ("<XF86MonBrightnessUp>",   safeSpawn "xbacklight" ["-inc", "5"])
-    , ("<XF86MonBrightnessDown>", safeSpawn "xbacklight" ["-dec", "5"])
+    , ("<XF86MonBrightnessUp>",   liftIO $ getBacklightDir >>= \b -> adjustBacklight b $ perceptual ( 0.05 +))
+    , ("<XF86MonBrightnessDown>", liftIO $ getBacklightDir >>= \b -> adjustBacklight b $ perceptual (-0.05 +))
     
     , ("<XF86AudioMute>",          safeSpawn "pamixer" ["-t"])
     , ("<XF86AudioLowerVolume>",   safeSpawn "pamixer" ["-d", "1"])
@@ -214,6 +216,43 @@ safeSpawnPID prog args = io $ forkProcess $ do
  -- export it.
 killPID :: ProcessID -> IO ()
 killPID pid = try @SomeException (signalProcessGroup sigTERM pid) *> return ()
+
+ -- Utilities for backlight management
+backlightSearchDir :: String
+backlightSearchDir =  "/sys/class/backlight"
+
+getBacklightDir :: IO String
+getBacklightDir =  do dirs <- listDirectory backlightSearchDir
+                      case dirs of
+                          []    -> fail "Unable to find the backlight acpi directory"
+                          dir:_ -> return $ backlightSearchDir ++ "/" ++ dir
+
+getBacklightProp :: String -> String -> IO Integer
+getBacklightProp backlight prop = readFile' (backlight ++ "/" ++ prop) >>= return . read
+
+setBacklightProp :: String -> String -> Integer -> IO ()
+setBacklightProp backlight prop val = writeFile (backlight ++ "/" ++ prop) (show val)
+
+adjustBacklight :: String -> (Double -> Double) -> IO ()
+adjustBacklight backlight f = do brightness    <- getBacklightProp backlight "brightness"
+                                 maxBrightness <- getBacklightProp backlight "max_brightness"
+                                 let brightnessFrac    = fromIntegral brightness / fromIntegral maxBrightness
+                                 let newBrightnessFrac = f brightnessFrac
+                                 let newBrightness     = round $ newBrightnessFrac * fromIntegral maxBrightness
+                                 setBacklightProp backlight "brightness" newBrightness
+
+perceptual     :: (Double -> Double) -> (Double -> Double)
+perceptual f x =  let maxValue      = 100 -- Tune for "feel"
+                      stretchedIn   = x * maxValue
+                      perceptualIn  = case stretchedIn of 0 -> 0
+                                                          x -> log x / log maxValue
+                      perceptualOut = clamp 0 1 $ f perceptualIn
+                      stretchedOut  = case perceptualOut of 0 -> 0
+                                                            y -> exp $ y * log maxValue
+                   in stretchedOut / maxValue
+
+clamp :: Double -> Double -> Double -> Double
+clamp lo hi x = max lo $ min hi x
 
  -- Format string for scrot
 scrotFormat :: String

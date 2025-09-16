@@ -19,9 +19,6 @@ unclutter
 trayer
 network-manager-applet
 
-# Backlight
-acpilight
-
 # Audio
 pulseaudio
 pulseaudio-alsa
