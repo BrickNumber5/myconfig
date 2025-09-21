@@ -60,8 +60,10 @@ docker-buildx
 postgresql
 
 ## Programming Languages
+deno
 python3
 jdk-openjdk
+wabt
 
 ## Password Manager
 pass
@@ -72,3 +74,5 @@ texlive-latex
 texlive-latexextra
 texlive-latexrecommended
 texlive-mathscience
+texlive-fontsextra
+texlive-luatex
