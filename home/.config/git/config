@@ -6,6 +6,10 @@
     ; Cache credentials for 1hr
     helper = cache --timeout 3600
 
+[diff]
+    ; Make word-diff behave how I'd like it to
+    wordRegex = [-a-zA-Z0-9_$]+|.
+
 [includeIf "hasconfig:remote.*.url:https://github.com/**"]
     ; Include github specific configuration
     ; (specifically my name and email)
