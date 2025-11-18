@@ -17,6 +17,10 @@ xclip
 
 unclutter
 
+# Package Management
+pacman-contrib
+reflector
+
 # Audio
 pulseaudio
 pulseaudio-alsa
@@ -51,6 +55,7 @@ xdg-utils # For xdg-open, etc.
 
 qrencode
 graphviz
+python-matplotlib
 
 docker
 docker-buildx
@@ -60,8 +65,10 @@ postgresql
 ## Programming Languages
 deno
 python3
+rust
 jdk-openjdk
 wabt
+gdb
 
 ## Password Manager
 pass
