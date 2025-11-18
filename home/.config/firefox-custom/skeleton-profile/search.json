@@ -36,6 +36,15 @@
             }
         },
         {
+            "id": "perplexity",
+            "_name": "Perplexity",
+            "_isConfigEngine": true,
+            "_metaData": {
+                "hidden": true,
+                "alias": ""
+            }
+        },
+        {
             "id": "wikipedia",
             "_name": "Wikipedia (en)",
             "_isConfigEngine": true,
