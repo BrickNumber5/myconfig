@@ -53,6 +53,7 @@ __bri_ps1__CHAR_GIT_UNSTAGED_MRK='◉'
 __bri_ps1__CHAR_GIT_UNTRACKED_MRK='○'
 __bri_ps1__CHAR_GIT_CONFLICTED_MRK='∅'
 __bri_ps1__CHAR_GIT_STASH_INDICATOR='∫'
+__bri_ps1__CHAR_PYVENV_INDICATOR='⎈'
 __bri_ps1__CHAR_ANGLE_BRACKET_L='⟨'
 __bri_ps1__CHAR_ANGLE_BRACKET_R='⟩'
 
@@ -70,6 +71,7 @@ __bri_ps1__CLR_HOST=163
 __bri_ps1__CLR_USER=170
 __bri_ps1__CLR_PATH=213
 __bri_ps1__CLR_GIT=111
+__bri_ps1__CLR_PYVENV=25
 __bri_ps1__CLR_EXIT_CODE=231
 
 # Render the leading triangle
@@ -513,7 +515,7 @@ __bri_ps1__render() {
     __bri_ps1__extract_git
     __bri_ps1__sizehints_for_git
     
-    # Dynamically shrink shrinkable segments (path [TODO: and git])
+    # Dynamically shrink shrinkable segments
     while (( __bri_ps1__path_sizehint_max + __bri_ps1__git_sizehint_max > __bri_ps1__COLUMNS_SOFTMAX )); do
         if ((    __bri_ps1__path_sizehint_max <= __bri_ps1__path_sizehint_min
               && __bri_ps1__git_sizehint_max  <= __bri_ps1__git_sizehint_min  )); then break; fi
@@ -555,6 +557,11 @@ __bri_ps1__render() {
     # Git
     __bri_ps1__render_git_latch "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_GIT"
     
+    # Python Venv
+    if ! [ -z "$VIRTUAL_ENV" ]; then
+        __bri_ps1__render_segment_latch "$__bri_ps1__CHAR_PYVENV_INDICATOR $VIRTUAL_ENV_PROMPT" "$__bri_ps1__CLR_FG" "$__bri_ps1__CLR_PYVENV"
+    fi
+    
     # Exit Code
     if (( "$exit_code" != 0 )); then
         __bri_ps1__render_segment_latch "$exit_code" "$__bri_ps1__CLR_NEGATIVE" "$__bri_ps1__CLR_EXIT_CODE"
@@ -569,3 +576,6 @@ __bri_ps1__render() {
     
     return "$exit_code"
 }
+
+# Prevent python venvs from hijacking the prompt
+export VIRTUAL_ENV_DISABLE_PROMPT=1
