@@ -17,8 +17,11 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.InsertPosition
+import XMonad.Hooks.RefocusLast
 
 import XMonad.Util.Hacks
+
+import qualified XMonad.StackSet as W
 
 import System.Directory (listDirectory)
 import System.IO (readFile')
@@ -65,7 +68,7 @@ customXmobarPP = def
 customConfig = def
     { modMask     = mod4Mask   -- Rebind Mod to the Super Key (So I can actually use [Alt] for normal things)
     , layoutHook  = avoidStruts $ spacingWithEdge 3 $ customLayoutHook
-    , manageHook  = insertPosition Below Newer <+> customManageHook
+    , manageHook  = customManageHook
     , startupHook = customStartupHook
     , borderWidth = 2
     , focusedBorderColor = tmmagenta
@@ -122,8 +125,9 @@ customLayoutHook = tiledLayout ||| threeColLayout ||| Mirror tiledLayout ||| Ful
 
 customManageHook :: ManageHook
 customManageHook = composeAll
-    [ className =? "Gimp" --> doFloat
-    , isDialog            --> doFloat
+  -- NOTE: The composition order is super finicky and will misbehave if altered
+    [ isFloat <||> willFloat --> doF W.swapUp <+> doCenterFloat
+    ,                            insertPosition Below Newer
     ]
 
 customStartupHook :: X ()
