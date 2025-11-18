@@ -51,6 +51,9 @@ unzip
 gvim # I don't actually use gvim, but the vim that ships with gvim
      # has support for the x clipboard and the default one doesn't
 
+vim-ale
+rust-analyzer
+
 xdg-utils # For xdg-open, etc.
 
 qrencode
