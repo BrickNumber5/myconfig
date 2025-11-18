@@ -36,7 +36,6 @@ main = xmonad
      . ewmh
      . docks
      . unclutter
-     . addTray
      . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
              <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP))
      $ customConfig
@@ -130,35 +129,6 @@ customManageHook = composeAll
 customStartupHook :: X ()
 customStartupHook = do
   runProcessWithInput "feh" ["--bg-fill", "--no-fehbg", ".wallpaper/current"] "" *> return ()
-
-  -- -- Trayer -- --
-newtype SavedTrayerPID = SavedTrayerPID { getPID :: Maybe ProcessID }
-  deriving (Show, Read)
-
-instance ExtensionClass SavedTrayerPID where
-  initialValue  = SavedTrayerPID Nothing
-  extensionType = PersistentExtension
-
-  -- Add trayer removing any previously existing trayer
-addTray :: XConfig a -> XConfig a
-addTray cfg = cfg
-    { startupHook = do
-        startupHook cfg
-        XS.gets getPID >>= flip whenJust (io . killPID)
-        pid <- safeSpawnPID "trayer"
-            [ "--edge", "bottom"
-            , "--align", "right"
-            , "--SetDockType", "true"
-            , "--SetPartialStrut", "true"
-            , "--expand", "true"
-            , "--width", "15"
-            , "--transparent", "true"
-            , "--tint", "0x000000"
-            , "--height", "30"
-            , "--alpha", "128"
-            ]
-        XS.put $ SavedTrayerPID $ Just pid
-    }
 
   -- -- Unclutter -- --
 newtype SavedUnclutterPID = SavedUnclutterPID { getUnclutterPID :: Maybe ProcessID }

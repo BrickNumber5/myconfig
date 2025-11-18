@@ -16,8 +16,6 @@ dmenu
 xclip
 
 unclutter
-trayer
-network-manager-applet
 
 # Audio
 pulseaudio
