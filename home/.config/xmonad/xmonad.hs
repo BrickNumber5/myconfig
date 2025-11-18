@@ -127,6 +127,7 @@ customManageHook :: ManageHook
 customManageHook = composeAll
   -- NOTE: The composition order is super finicky and will misbehave if altered
     [ isFloat <||> willFloat --> doF W.swapUp <+> doCenterFloat
+    , isDialog               --> doCenterFloat
     ,                            insertPosition Below Newer
     ]
 
