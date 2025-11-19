@@ -10,6 +10,14 @@
     ; Make word-diff behave how I'd like it to
     wordRegex = [-a-zA-Z0-9_$]+|.
 
+[merge]
+    ; Include original text in conflicts
+    conflictStyle = zdiff3
+
+[user]
+    ; Don't guess user.name and user.email
+    useConfigOnly = true
+
 [includeIf "hasconfig:remote.*.url:https://github.com/**"]
     ; Include github specific configuration
     ; (specifically my name and email)
