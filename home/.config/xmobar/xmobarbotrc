@@ -10,6 +10,6 @@ Config { overrideRedirect = False
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = " %status% "
+       , template = "}{ %status% "
        }
 

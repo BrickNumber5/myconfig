@@ -21,6 +21,9 @@ import XMonad.Hooks.RefocusLast
 
 import XMonad.Util.Hacks
 
+import XMonad.Prompt
+import qualified XMonad.Prompt.Shell as Shell
+
 import qualified XMonad.StackSet as W
 
 import System.Directory (listDirectory)
@@ -32,6 +35,7 @@ import System.Posix.Signals (sigTERM, signalProcessGroup)
 import Codec.Binary.UTF8.String (encodeString)
 
 import Control.Exception (SomeException, try)
+import Control.Monad (liftM)
 
 main :: IO ()
 main = xmonad
@@ -79,25 +83,23 @@ customConfig = def
     , "M-S-p" 
     ]
   `additionalKeysP`
-    [ ("M-/",   runProcessWithInput "dmenu_path" [] ""
-            >>= menu "Launch" . split (== '\n')
-            >>= safeSpawnProg
+    [ ("M-/",   customShellPrompt "Launch: " customPromptConfig
+            >>= flip whenJust
+                (\x -> safeSpawn "/bin/bash"
+                    [ "-c", "exec " ++ x
+                    ])
       )
-    , ("M-C-/", runProcessWithInput "dmenu_path" [] ""
-            >>= menu "Launch (In Terminal)" . split (== '\n')
-            >>= runInTerm ""
-      )
-      
+    , ("M-C-/", asks (terminal . config)
+            >>= \term ->
+                customShellPrompt "Launch (In Terminal Emulator): " customPromptConfig
+            >>= flip whenJust
+                (\x -> safeSpawn term
+                    [ "-e", "/bin/bash"
+                    , "-c", "exec " ++ x
+                    ]))
+    
     , ("M-f",   safeSpawnProg "firefox")
-      -- This relies, perhaps dangerously, on a) the current working directory always being home
-      -- (since runProcessWithInput doesn't do shell expansion) and b) that the profiles will always
-      -- be in approximately the same format in ~/.mozilla/firefox/profiles.ini.
-      -- Likely, the worst possible actual breakage will be that this shortcut simply stops working at
-      -- some point.
-    , ("M-S-f", runProcessWithInput "sed" ["/Name=/!d;s/Name=//", ".mozilla/firefox/profiles.ini"] ""
-            >>= menu "Firefox Profile" . split (== '\n')
-            >>= safeSpawn "firefox" . ("-P" :) . (: [])
-      )
+    , ("M-S-f", customFirefoxPrompt customPromptConfig)
     
     , ("<XF86Calculator>", runInTerm "" "python3")
     
@@ -135,6 +137,53 @@ customStartupHook :: X ()
 customStartupHook = do
   runProcessWithInput "feh" ["--bg-fill", "--no-fehbg", ".wallpaper/current"] "" *> return ()
 
+  -- -- Prompts -- --
+customPromptConfig :: XPConfig
+customPromptConfig = def
+    { font              = "xft:Fira Code SemiBold-12"
+    , bgColor           = tmblack
+    , fgColor           = tmwhite
+    , bgHLight          = tmmagenta
+    , fgHLight          = tmblack
+    , borderColor       = tmmagenta
+    , promptBorderWidth = 2
+    , position          = Bottom
+    , height            = 30
+    , historySize       = 0
+    , maxComplRows      = Just 15
+    , changeModeKey     = 0
+    }
+
+data CustomShellPrompt = CustomShellPrompt String
+
+instance XPrompt CustomShellPrompt where
+    showXPrompt (CustomShellPrompt label) = label
+    completionToCommand _ = foldr (\c cs -> if c `elem` " \"#$&'()*;?@[\\]{}" then
+                                                '\\' : c : cs
+                                            else
+                                                c : cs
+                                  ) ""
+
+customShellPrompt :: String -> XPConfig -> X (Maybe String)
+customShellPrompt label config = do
+    cmds <- io Shell.getCommands
+    mkXPromptWithReturn (CustomShellPrompt label) config (Shell.getShellCompl cmds $ searchPredicate config) return
+
+data CustomFirefoxPrompt = CustomFirefoxPrompt
+
+instance XPrompt CustomFirefoxPrompt where
+  showXPrompt    CustomFirefoxPrompt = "Firefox: "
+  nextCompletion CustomFirefoxPrompt = getNextCompletion
+
+customFirefoxPrompt :: XPConfig -> X ()
+customFirefoxPrompt config =
+    runProcessWithInput "sed" ["/Name=/!d;s/Name=//", ".mozilla/firefox/profiles.ini"] ""
+    >>= \profiles ->
+        mkXPrompt CustomFirefoxPrompt
+                  config
+                  (mkComplFunFromList' config $ split (== '\n') profiles)
+                  (safeSpawn "firefox" . ("-P" :) . (: []))
+
   -- -- Unclutter -- --
 newtype SavedUnclutterPID = SavedUnclutterPID { getUnclutterPID :: Maybe ProcessID }
   deriving (Show, Read)
@@ -164,19 +213,6 @@ split p l = case dropWhile p l of
                  [] -> []
                  l' -> x : split p l''
                      where (x, l'') = break p l'
-
- -- Utility for spawning menus
-menu :: MonadIO m => String -> [String] -> m String
-menu prompt options = Dmenu.menuArgs "dmenu"
-    [ "-p", prompt
-    , "-i"
-    , "-b"
-    , "-fn", "Fira Code:style=Bold"
-    , "-nb", tmblack
-    , "-nf", tmwhite
-    , "-sb", tmblack
-    , "-sf", tmmagenta
-    ] $ map (filter (/= '\n')) options
 
  -- Alteration of XMonad.Util.Run.safeSpawn to return the process id
 safeSpawnPID :: MonadIO m => FilePath -> [String] -> m ProcessID
