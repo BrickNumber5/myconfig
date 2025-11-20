@@ -1,6 +1,5 @@
 import XMonad
 
-import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 import qualified XMonad.Util.Dmenu as Dmenu
@@ -31,6 +30,8 @@ import System.IO (readFile')
 import System.Posix.Types (ProcessID)
 import System.Posix.Process (createSession, executeFile, forkProcess)
 import System.Posix.Signals (sigTERM, signalProcessGroup)
+
+import qualified Data.Map as M
 
 import Codec.Binary.UTF8.String (encodeString)
 
@@ -70,51 +71,192 @@ customXmobarPP = def
     lowWhite = xmobarColor "#AAAAAA" ""
 
 customConfig = def
-    { modMask     = mod4Mask   -- Rebind Mod to the Super Key (So I can actually use [Alt] for normal things)
-    , layoutHook  = avoidStruts $ spacingWithEdge 3 $ customLayoutHook
-    , manageHook  = customManageHook
-    , startupHook = customStartupHook
-    , borderWidth = 2
+    { modMask            = mod4Mask -- Use <Super> as modifier key
+    , layoutHook         = avoidStruts $ spacingWithEdge 3 $ customLayoutHook
+    , manageHook         = customManageHook
+    , startupHook        = customStartupHook
+    , borderWidth        = 2
     , focusedBorderColor = tmmagenta
-    , terminal = "alacritty"
+    , terminal           = "alacritty"
+    , keys               = customKeys
+    , mouseBindings      = customMouseBindings
     }
-  `removeKeysP`
-    [ "M-p"
-    , "M-S-p" 
-    ]
-  `additionalKeysP`
-    [ ("M-/",   customShellPrompt "Launch: " customPromptConfig
-            >>= flip whenJust
-                (\x -> safeSpawn "/bin/bash"
-                    [ "-c", "exec " ++ x
-                    ])
+
+customKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+customKeys XConfig
+    { modMask    = modMask
+    , terminal   = terminal
+    , workspaces = workspaces
+    , layoutHook = layoutHook
+    } = M.fromList $ map (\(key, description, action) -> (key, action)) keys
+                  ++ [ ((modMask .|. mask, key), windows $ fn i)
+                        | (i, key)   <- zip workspaces [xK_1 .. xK_9]
+                        , (mask, fn) <- [ (0,        W.greedyView)
+                                        , (mod1Mask, \i -> W.greedyView i
+                                                         . W.shift i)
+                                        ]]
+  where
+    keys :: [((KeyMask, KeySym), String, X ())]
+    keys =
+        [ ( (modMask .|. shiftMask,   xK_Return)
+          , "launch terminal emulator"
+          , safeSpawn terminal []
+          )
+        , ( (modMask .|. shiftMask,   xK_c)
+          , "close focused window"
+          , kill
+          )
+
+        , ( (modMask,                 xK_space)
+          , "cycle through available layouts"
+          , sendMessage NextLayout)
+        , ( (modMask .|. shiftMask,   xK_space)
+          , "reset available layouts"
+          , setLayout layoutHook)
+
+        , ( (modMask,                 xK_m)
+          , "focus the main window"
+          , windows W.focusMaster
+          )
+        , ( (modMask,                 xK_j)
+          , "focus the next window"
+          , windows W.focusDown)
+        , ( (modMask,                 xK_k)
+          , "focus the previous window"
+          , windows W.focusUp)
+
+        , ( (modMask,                 xK_Return)
+          , "swap the focused window with the main window"
+          , windows W.swapMaster
+          )
+        , ( (modMask .|. shiftMask,   xK_j)
+          , "swap the focused window with the next window"
+          , windows W.swapDown
+          )
+        , ( (modMask .|. shiftMask,   xK_k)
+          , "swap the focused window with the previous window"
+          , windows W.swapUp
+          )
+
+        , ( (modMask,                 xK_h)
+          , "shrink the main area"
+          , sendMessage Shrink
+          )
+        , ( (modMask,                 xK_l)
+          , "expand the main area"
+          , sendMessage Expand
+          )
+
+        , ( (modMask,                 xK_t)
+          , "tile/float the focused window"
+          , withFocused $ \window ->
+                          floatLocation window
+                      >>= \(_, location) ->
+                          windows $ \stackset ->
+                                    if M.member window (W.floating stackset) then
+                                        W.sink window stackset
+                                    else
+                                        W.float window location stackset)
+
+        , ( (modMask,                 xK_q)
+          , "recompile and restart xmonad"
+          , spawn "type xmonad && xmonad --recompile && xmonad --restart"
+          )
+
+        , ( (modMask,                 xK_slash)
+          , "launch an application"
+          , customShellPrompt "launch: " customPromptConfig
+                >>= flip whenJust
+                    (\x -> safeSpawn "/bin/bash"
+                        [ "-c", "exec " ++ x
+                        ])
+          )
+        , ( (modMask .|. controlMask, xK_slash)
+          , "launch an application in terminal emulator"
+          , customShellPrompt "launch (in term): " customPromptConfig
+                >>= flip whenJust
+                    (\x -> safeSpawn terminal
+                        [ "-e", "/bin/bash"
+                        , "-c", "exec " ++ x
+                        ])
+          )
+
+        , ( (modMask,                 xK_f)
+          , "launch firefox"
+          , safeSpawnProg "firefox"
+          )
+
+        , ( (modMask .|. shiftMask,   xK_f)
+          , ""
+          , customFirefoxPrompt customPromptConfig
+          )
+
+        , ( (noModMask,               stringToKeysym "XF86Calculator")
+          , "launch python3 in terminal emulator"
+          , runInTerm "" "python3"
+          )
+
+        , ( (modMask,                 xK_Print)
+          , "take a screenshot"
+          , unGrab *> safeSpawn "scrot" ["--file", scrotFormat]
+          )
+        , ( (modMask .|. shiftMask,   xK_Print)
+          , "take a screenshot of a selected screen region"
+          , unGrab *> safeSpawn "scrot" ["--file", scrotFormat, "--select"]
+          )
+
+        , ( (modMask .|. shiftMask,   xK_s)
+          , "lock the screen"
+          , safeSpawnProg "slock"
+          )
+
+        , ( (noModMask,               stringToKeysym "XF86MonBrightnessUp")
+          , "increase brightness"
+          , liftIO $ getBacklightDir
+                >>= \backlight ->
+                    adjustBacklight backlight $ perceptual ( 0.05 +)
+          )
+        , ( (noModMask,               stringToKeysym "XF86MonBrightnessDown")
+          , "decrease brightness"
+          , liftIO $ getBacklightDir
+                >>= \backlight ->
+                    adjustBacklight backlight $ perceptual (-0.05 +)
+          )
+
+        , ( (noModMask,               stringToKeysym "XF86AudioMute")
+          , "(un)mute audio"
+          , safeSpawn "pamixer" ["-t"]
+          )
+        , ( (noModMask,               stringToKeysym "XF86AudioLowerVolume")
+          , "decrease volume"
+          , safeSpawn "pamixer" ["-d", "1"]
+          )
+        , ( (noModMask,               stringToKeysym "XF86AudioRaiseVolume")
+          , "increase volume"
+          , safeSpawn "pamixer" ["-i", "1"]
+          )
+        , ( (shiftMask,               stringToKeysym "XF86AudioRaiseVolume")
+          , "increase volume, disregarding cap"
+          , safeSpawn "pamixer" ["-i", "1", "--allow-boost"]
+          )
+        ]
+
+customMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
+customMouseBindings XConfig
+    { modMask = modMask
+    } = M.fromList $
+    [ ( (modMask, button1)
+      , \window -> focus window
+                >> float window
+                >> windows W.shiftMaster
+                >> mouseMoveWindow window
       )
-    , ("M-C-/", asks (terminal . config)
-            >>= \term ->
-                customShellPrompt "Launch (In Terminal Emulator): " customPromptConfig
-            >>= flip whenJust
-                (\x -> safeSpawn term
-                    [ "-e", "/bin/bash"
-                    , "-c", "exec " ++ x
-                    ]))
-    
-    , ("M-f",   safeSpawnProg "firefox")
-    , ("M-S-f", customFirefoxPrompt customPromptConfig)
-    
-    , ("<XF86Calculator>", runInTerm "" "python3")
-    
-    , ("M-<Print>",   unGrab *> safeSpawn "scrot" ["--file", scrotFormat])
-    , ("M-S-<Print>", unGrab *> safeSpawn "scrot" ["--file", scrotFormat, "--select"])
-    
-    , ("M-S-s", safeSpawnProg "slock")
-    
-    , ("<XF86MonBrightnessUp>",   liftIO $ getBacklightDir >>= \b -> adjustBacklight b $ perceptual ( 0.05 +))
-    , ("<XF86MonBrightnessDown>", liftIO $ getBacklightDir >>= \b -> adjustBacklight b $ perceptual (-0.05 +))
-    
-    , ("<XF86AudioMute>",          safeSpawn "pamixer" ["-t"])
-    , ("<XF86AudioLowerVolume>",   safeSpawn "pamixer" ["-d", "1"])
-    , ("<XF86AudioRaiseVolume>",   safeSpawn "pamixer" ["-i", "1"])
-    , ("S-<XF86AudioRaiseVolume>", safeSpawn "pamixer" ["-i", "1", "--allow-boost"])
+    , ( (modMask, button3)
+      , \window -> focus window
+                >> float window
+                >> windows W.shiftMaster
+                >> mouseResizeWindow window
+      )
     ]
 
 customLayoutHook = tiledLayout ||| threeColLayout ||| Mirror tiledLayout ||| Full
