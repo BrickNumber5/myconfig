@@ -26,6 +26,7 @@ import qualified XMonad.Prompt.Shell as Shell
 import qualified XMonad.StackSet as W
 
 import System.Directory (listDirectory)
+import System.Exit (exitSuccess)
 import System.IO (readFile')
 import System.Posix.Types (ProcessID)
 import System.Posix.Process (createSession, executeFile, forkProcess)
@@ -62,7 +63,7 @@ customXmobarPP = def
     ppWindow :: String -> String
     ppWindow = (\w -> if   null w
                       then ""
-                      else wrap (white "[") (white "]") . magenta . xmobarRaw $ w)
+                      else xmobarBorder "Bottom" tmmagenta 2 . magenta . xmobarRaw $ w)
              . shorten 25
 
     lowWhite, magenta, white :: String -> String
@@ -161,6 +162,10 @@ customKeys XConfig
         , ( (modMask,                 xK_q)
           , "recompile and restart xmonad"
           , spawn "type xmonad && xmonad --recompile && xmonad --restart"
+          )
+        , ( (modMask .|. shiftMask,   xK_q)
+          , "quit xmonad"
+          , io exitSuccess
           )
 
         , ( (modMask,                 xK_slash)
