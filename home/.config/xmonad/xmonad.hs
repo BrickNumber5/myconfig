@@ -64,7 +64,7 @@ customXmobarPP = def
     ppWindow = (\w -> if   null w
                       then ""
                       else xmobarBorder "Bottom" tmmagenta 2 . magenta . xmobarRaw $ w)
-             . shorten 25
+             . shorten 60
 
     lowWhite, magenta, white :: String -> String
     magenta  = xmobarColor tmmagenta ""
