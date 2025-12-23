@@ -101,8 +101,6 @@
                     "type": "application/x-suggestions+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -128,8 +126,6 @@
                     "template": "https://developer.mozilla.org/search?q={searchTerms}"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -172,8 +168,6 @@
                     "type": "application/opensearchdescription+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -216,8 +210,6 @@
                     "type": "application/x-suggestions+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -249,8 +241,6 @@
                     "template": "https://github.com/search?q={searchTerms}&ref=opensearch"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -290,8 +280,6 @@
                     "type": "application/opensearchdescription+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -332,8 +320,6 @@
                     "type": "application/opensearchdescription+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -359,8 +345,6 @@
                     "template": "https://stackoverflow.com/search?q={searchTerms}"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -404,8 +388,6 @@
                     "type": "application/x-suggestions+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -430,8 +412,6 @@
                     "template": "https://pypi.org/search/?q={searchTerms}"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -456,8 +436,6 @@
                     "template": "https://crates.io/search?q={searchTerms}"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -503,8 +481,6 @@
                     "type": "application/opensearchdescription+xml"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": [],
             "_updateInterval": null,
@@ -533,8 +509,6 @@
                     "template": "https://www.postgresql.org/search/"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": []
         },
@@ -585,8 +559,6 @@
                     "template": "https://bbs.archlinux.org/search.php"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": []
         },
@@ -621,8 +593,6 @@
                     "template": "https://en.wiktionary.org/w/index.php"
                 }
             ],
-            "_orderHint": null,
-            "_telemetryId": null,
             "_filePath": null,
             "_definedAliases": []
         }
