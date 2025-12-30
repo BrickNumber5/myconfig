@@ -319,7 +319,7 @@ customShellPrompt label config = do
 data CustomFirefoxPrompt = CustomFirefoxPrompt
 
 instance XPrompt CustomFirefoxPrompt where
-  showXPrompt    CustomFirefoxPrompt = "Firefox: "
+  showXPrompt    CustomFirefoxPrompt = "firefox: "
   nextCompletion CustomFirefoxPrompt = getNextCompletion
 
 customFirefoxPrompt :: XPConfig -> X ()
