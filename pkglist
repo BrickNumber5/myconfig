@@ -22,8 +22,9 @@ pacman-contrib
 reflector
 
 # Audio
-pulseaudio
-pulseaudio-alsa
+pipewire
+pipewire-pulse
+pipewire-alsa
 pamixer
 
 # Fonts
