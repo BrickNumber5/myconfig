@@ -269,7 +269,7 @@ customLayoutHook = tiledLayout ||| threeColLayout ||| Mirror tiledLayout ||| Ful
         threeColLayout = ThreeColMid nmain delta mratioThree
         nmain          = 1       -- Number of windows in main pane (1)
         delta          = 3/100   -- Resize increment (%)
-        mratioTiled    = 3/5     -- Ratio of main pane to others
+        mratioTiled    = 4/7     -- Ratio of main pane to others
         mratioThree    = 1/2
 
 customManageHook :: ManageHook
