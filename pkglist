@@ -7,6 +7,7 @@ xorg-xmessage # At least until I replace xmonad's error messaging
 xorg-xrandr
 xorg-xset
 xorg-xsetroot
+xorg-xhost
 
 xmobar
 alacritty
@@ -38,16 +39,20 @@ man-pages
 
 # Useful Software
 firefox
+thunderbird
 
 gimp
 inkscape
 fontforge
 blender
+calibre
 
 openssh
 
 zip
 unzip
+
+rsync
 
 gvim # I don't actually use gvim, but the vim that ships with gvim
      # has support for the x clipboard and the default one doesn't
