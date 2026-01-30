@@ -67,6 +67,8 @@ qrencode
 graphviz
 python-matplotlib
 
+qemu-full
+
 docker
 docker-buildx
 
