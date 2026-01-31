@@ -39,6 +39,9 @@ xset s off
 xset s noblank
 xset -dpms
 
+# allow running apps as other (explicitly created) users
+xhost +si:localgroup:users
+
 # create /tmp/status_bar
 _status_bar_pipe=/tmp/status_bar
 if ! [ -p $_status_bar_pipe ]; then
