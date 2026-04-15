@@ -11,6 +11,8 @@ filetype plugin off
 
 set clipboard=unnamedplus
 
+set nomodeline
+
 set listchars=eol:¶,space:·,tab:-->,nbsp:#
 highlight NonText ctermfg=darkgray
 highlight SpecialKey ctermfg=darkgray
