@@ -32,7 +32,8 @@
             "_name": "DuckDuckGo",
             "_isConfigEngine": true,
             "_metaData": {
-                "order": 4
+                "order": 4,
+                "hasBeenUsed": true
             }
         },
         {
@@ -49,7 +50,8 @@
             "_name": "Wikipedia (en)",
             "_isConfigEngine": true,
             "_metaData": {
-                "order": 6
+                "order": 6,
+                "hasBeenUsed": true
             }
         },
         {
@@ -137,15 +139,206 @@
             "_loadPath": "[https]archlinux.org/arch-packages.xml",
             "_iconMapObj": {
                 "16": "sidecar:image/png,arpkgs-16.png",
+                "32": "sidecar:image/png,arpkgs-32.png",
                 "64": "sidecar:image/png,arpkgs-64.png"
             },
             "_metaData": {
                 "loadPathHash": "f244Vzud3/bWbuQSHLy3CzY0MriKW5TAWG8fyKnDApw=",
-                "updateexpir": 1743887489784,
+                "updateexpir": 1778515937530,
                 "order": 9,
-                "alias": "@arpkgs"
+                "alias": "@arpkgs",
+                "updatelastmodified": "Mon, 04 May 2026 16:12:17 GMT"
             },
             "_urls": [
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
+                {
+                    "params": [],
+                    "rels": [],
+                    "template": "https://archlinux.org/packages/?q={searchTerms}"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "suggestions"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/suggest?q={searchTerms}",
+                    "type": "application/x-suggestions+json"
+                },
+                {
+                    "params": [],
+                    "rels": [
+                        "self"
+                    ],
+                    "template": "https://archlinux.org/opensearch/packages/",
+                    "type": "application/opensearchdescription+xml"
+                },
                 {
                     "params": [],
                     "rels": [],
