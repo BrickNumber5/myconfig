@@ -31,8 +31,12 @@
  * In combination with the previous rule makes the urlbar completely clean when
  * empty which I prefer.
  */
-#urlbar:not([searchmode]) #urlbar-searchmode-switcher {
-    /* In principle we could just use display: none; but then the text entered
+#urlbar:not([searchmode]) .searchmode-switcher {
+    display: none !important;
+    /*
+     * Historical hack, left in the code in case it becomes necessary again.
+     *
+     * In principle we could just use display: none; but then the text entered
      * into the urlbar would slam into the left hand side since this provides a
      * margin, gap, or something that provides the needed space on its right.
      * 
@@ -40,10 +44,11 @@
      * then replicate it, and then additional maintenence time updating that if
      * it ever changes but I opted to just make it completely empty so it can
      * still provide the gap. I suspect this strategy will be more robust.
-     */
+     *
     width: 0;
     padding: 0 !important;
     & * {
         display: none;
     }
+     */
 }
