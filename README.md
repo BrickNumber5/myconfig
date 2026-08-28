@@ -4,6 +4,10 @@ My (Arch\*) Linux configuration files. These are arranged in the relative positi
 
 \* Realistically, I doubt it matters.
 
+<!--
+
+(commented as this is all dreadfully out-of-date TODO: fix)
+
 ## Configured Software
 
 This repo contains configuration files for:
@@ -50,3 +54,4 @@ In addition to the required software, some configuration files expect something 
 ## Other Assorted Notes
 
 For reasons in order to make the custom default font settings work, add a symlink to `/user/share/fontconfig/config.avail` to `~/.config/fontconfig/conf.d/` under the same name
+-->
