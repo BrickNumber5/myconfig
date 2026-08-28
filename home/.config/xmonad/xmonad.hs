@@ -45,6 +45,7 @@ main = xmonad
      . ewmh
      . docks
      . unclutter
+     . xscreensaver
      . withSB ( statusBarProp "xmobar ~/.config/xmobar/xmobartoprc" (pure customXmobarPP)
              <> statusBarProp "xmobar ~/.config/xmobar/xmobarbotrc" (pure customXmobarPP))
      $ customConfig
@@ -212,7 +213,7 @@ customKeys XConfig
 
         , ( (modMask .|. shiftMask,   xK_s)
           , "lock the screen"
-          , safeSpawnProg "slock"
+          , safeSpawn "xscreensaver-command" ["--lock"]
           )
 
         , ( (noModMask,               stringToKeysym "XF86MonBrightnessUp")
@@ -352,6 +353,27 @@ unclutter cfg = cfg
             , "--timeout", "1"
             ]
         XS.put $ SavedUnclutterPID $ Just pid
+    }
+
+  -- -- XScreenSaver -- --
+data SavedXScreenSaver = SavedXScreenSaver
+  deriving (Show, Read)
+
+instance ExtensionClass SavedXScreenSaver where
+  initialValue  = SavedXScreenSaver
+  extensionType = PersistentExtension
+
+  -- Activate xscreensaver removing any previously existing xscreensaver
+xscreensaver :: XConfig a -> XConfig a
+xscreensaver cfg = cfg
+    { startupHook = do
+        startupHook cfg
+        safeSpawn "xscreensaver-command"
+            [ "--exit"
+            ]
+        safeSpawn "xscreensaver"
+            [ "--no-splash"
+            ]
     }
 
  -- Utility to split strings
