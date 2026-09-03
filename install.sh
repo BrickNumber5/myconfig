@@ -166,6 +166,9 @@ printf '%s' 's/^#\s*\(%wheel\s*ALL=(ALL.*)\s*ALL\)/\1/g' | EDITOR='sed -f- -i' v
 printf "[$PREFIX (chroot)] Enable NetworkManager\n"
 systemctl enable NetworkManager
 
+printf "[$PREFIX (chroot)] Enable NTP Synchronization\n"
+systemctl enable systemd-timesyncd
+
 printf "[$PREFIX (chroot)] Adding lvm2 hook to /etc/mkinitcpio.conf...\n"
 sed -i '/^HOOKS=/s/block filesystems/block lvm2 filesystems/' /etc/mkinitcpio.conf
 grep -n2 '^HOOKS=' /etc/mkinitcpio.conf
