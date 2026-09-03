@@ -74,6 +74,9 @@ EOF
 
 printf "\n  %s\n\n" "$DISCLAIMER"
 
+# be extremely paranoid
+set -euo pipefail
+
 confirm_msg="yesruninstaller"
 printf "Are you sure you want to run this script? Type '%s' to confirm:\n" "$confirm_msg"
 read confirm_msg_check
