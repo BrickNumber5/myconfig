@@ -28,6 +28,9 @@ endfunction
 noremap <silent> <Space> :call g:VimrcClearTrailingWhitespace()<CR>
 noremap <silent> g<Space> :%call g:VimrcClearTrailingWhitespace()<CR>
 
+" Add common blackboard bold symbols to digraphs
+digraphs NN 8469 ZZ 8484 QQ 8474 RR 8477 CC 8450
+
 set bg=dark
 
 set number
