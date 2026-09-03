@@ -20,3 +20,10 @@ size = 9
 background = "#000000"
 foreground = "#FFFFFF"
 
+[keyboard]
+bindings = [
+    { mode = "Vi", key = "PageUp",   action = "ScrollHalfPageUp"   },
+    { mode = "Vi", key = "PageDown", action = "ScrollHalfPageDown" },
+    { key = "PageUp",   mods = "Shift", action = "ScrollHalfPageUp"   },
+    { key = "PageDown", mods = "Shift", action = "ScrollHalfPageDown" },
+]
