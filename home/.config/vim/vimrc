@@ -17,6 +17,10 @@ set listchars=eol:¶,space:·,tab:-->,nbsp:#
 highlight NonText ctermfg=darkgray
 highlight SpecialKey ctermfg=darkgray
 
+" Light up trailing whitespace
+highlight TrailingWhitespace ctermbg=red
+call matchadd("TrailingWhitespace", '\v\s+$')
+
 inoremap <silent> <CR> <CR>x<BS>
 nnoremap <silent> o ox<BS>
 nnoremap <silent> O Ox<BS>
