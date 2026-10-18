@@ -36,10 +36,12 @@ noto-fonts-emoji
 bash-completion
 man-db
 man-pages
+time
 
 # Useful Software
 firefox
-thunderbird
+
+aerc
 
 gimp
 inkscape
