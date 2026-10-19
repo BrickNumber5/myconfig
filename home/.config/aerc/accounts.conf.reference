@@ -1,0 +1,27 @@
+[[REDACTED] startmail]
+# imap
+source            = imaps://[REDACTED]%40startmail.com@imap.startmail.com:993
+source-cred-cmd   = pass show [REDACTED]
+
+# smtp
+outgoing          = smtps://[REDACTED]%40startmail.com@smtp.startmail.com:465
+outgoing-cred-cmd = pass show [REDACTED]
+
+# remap folder names to what they display as in the startmail web ui
+folder-map        = /home/brielle/.config/aerc/folder-map.map
+
+# reorder key folders (again aligning with startmail web ui)
+folders-sort      = Inbox,Drafts,Sent,Spam,Trash
+
+# set signature
+signature-file    = /home/brielle/.config/aerc/signature.txt
+
+# aliases
+use-envelope-from = true
+aliases           = [REDACTED]
+
+# organization
+default           = Inbox
+copy-to           = Sent
+from              = [REDACTED]
+cache-headers     = true
